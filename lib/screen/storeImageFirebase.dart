@@ -38,9 +38,4 @@ class StoreImage{
     // Fluttertoast.showToast(msg: "Please Insert Image Before Saving all the Changes");
     return error;
   }
-
-  Future<void> addImage({required Uint8List file})async {
-
-  }
-
 }

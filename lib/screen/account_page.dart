@@ -75,19 +75,10 @@ class _ProfilePageState extends State<ProfilePage> {
   User? user = FirebaseAuth.instance.currentUser;
   @override
   void initState() {
-    setState(() {
-      getTheme();
-      if (LoginPage.userCred?.user != null){
-        ProfilePage.userImage = LoginPage.userCred?.user?.photoURL;
-        ProfilePage.userName = LoginPage.userCred?.user?.displayName;
-        ProfilePage.userEmail = LoginPage.userCred?.user?.email;
-        ProfilePage.creationDate = LoginPage.userCred?.user?.phoneNumber;
-      }
-      else if (LoginPage.userCred?.user==null){
-        getUserData();
-      }
-    });
-    getUserDetails();
+    getTheme();
+    getUserDocID();
+    // getUserDetails();
+    getUserData();
     super.initState();
   }
 
@@ -106,29 +97,51 @@ class _ProfilePageState extends State<ProfilePage> {
     exit(0);
   }
 
-  String? userPhoto,name,email;
-  getUserDetails() {
-    if (user != null) {
-      name = user?.displayName;
-      email = user?.email;
-      userPhoto = user!.photoURL;
-      final emailVerified = user?.emailVerified;
+  String? docId;
+  getUserDocID() async {
+    QuerySnapshot querySnapshot =
+    await FirebaseFirestore.instance.collection('NewUsers').get();
+    for (var document in querySnapshot.docs) {
+      docId = document.id;
     }
   }
 
+  String? userName, userMail, userDOB, userCountry, userImage;
   var collection = FirebaseFirestore.instance.collection('NewUsers');
-
   Future<void> getUserData() async {
     var querySnapshot = await collection.get();
     for (var queryDocumentSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data = queryDocumentSnapshot.data();
       setState(() {
-        ProfilePage.userName = data['name'];
-        ProfilePage.userImage = data['photo'];
-        ProfilePage.userEmail = data['mail'];
+        userName = data['name'];
+        userMail = data['mail'];
+        userDOB = data['dob'];
+        userCountry = data['country'];
+        userImage = data['photo'];
       });
     }
   }
+
+  // String? userPhoto,name,email;
+  // getUserDetails() {
+  //   if (user != null) {
+  //     name = user?.displayName;
+  //     email = user?.email;
+  //     userPhoto = user!.photoURL;
+  //   }
+  // }
+  //
+  // Future<void> getUserData() async {
+  //   var querySnapshot = await collection.get();
+  //   for (var queryDocumentSnapshot in querySnapshot.docs) {
+  //     Map<String, dynamic> data = queryDocumentSnapshot.data();
+  //     setState(() {
+  //       ProfilePage.userName = data['name'];
+  //       ProfilePage.userImage = data['photo'];
+  //       ProfilePage.userEmail = data['mail'];
+  //     });
+  //   }
+  // }
 
   Future <bool> exitOverride() async{
     return (await showDialog(context: context,
@@ -172,11 +185,6 @@ class _ProfilePageState extends State<ProfilePage> {
         )
     )) ?? false;
   }
-
-  var nam = LoginPage.userCred?.user?.displayName;
-  var mil = LoginPage.userCred?.user?.email;
-  var photo = LoginPage.userCred?.user?.photoURL;
-
 
   @override
   Widget build(BuildContext context) {
@@ -259,7 +267,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         //   backgroundColor: Colors.black,
                         //   radius: 63,
                         // ):
-                        ProfilePage.userImage == null ?
+                        userImage == null ?
                         const SizedBox.shrink()
                         //     const CircleAvatar(
                         //       backgroundImage: NetworkImage("https://img.freepik.com/premium-vector/people-saving-money_"
@@ -268,7 +276,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         //       radius: 63,
                         //     )
                             : CircleAvatar(
-                                backgroundImage: NetworkImage(ProfilePage.userImage!),
+                                backgroundImage: NetworkImage(userImage!),
                                 backgroundColor: Colors.black,
                                 radius: 63,
                               ),
@@ -284,9 +292,9 @@ class _ProfilePageState extends State<ProfilePage> {
                         //       fontSize: 19,
                         //       fontWeight: FontWeight.w600,
                         //       color: textColor),):
-                        ProfilePage.userName != null
-                            ? Text(
-                          ProfilePage.userName!,
+                        userName!= null ?
+                        Text(
+                          userName!,
                                 style: TextStyle(
                                     fontSize: 19,
                                     fontWeight: FontWeight.w600,
@@ -304,8 +312,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         //       fontSize: 17.5,
                         //       fontWeight: FontWeight.w500,
                         //       color: textColor),):
-                        ProfilePage.userEmail!=null?Text(
-                          ProfilePage.userEmail!,
+                        userMail!=null?Text(
+                          userMail!,
                           style: TextStyle(
                               fontSize: 17.5,
                               fontWeight: FontWeight.w500,

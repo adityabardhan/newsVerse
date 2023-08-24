@@ -56,14 +56,7 @@ class _UpdateProfileState extends State<UpdateProfile>
       getTheme();
       getUserDocID();
       updateUserData();
-      if (LoginPage.userCred?.user!=null){
-        userName = LoginPage.userCred?.user?.displayName;
-        userMail = LoginPage.userCred?.user?.email;
-        userImage = LoginPage.userCred?.user?.photoURL;
-      }
-      else {
-        getUserData();
-      }
+      getUserData();
     });
     super.initState();
   }
@@ -92,20 +85,7 @@ class _UpdateProfileState extends State<UpdateProfile>
     setState(() {
       isLightTheme = settings.get('isLightTheme') ?? false;
     });
-    var querySnapshot = await collection.get();
-    for (var queryDocumentSnapshot in querySnapshot.docs) {
-      Map<String, dynamic> data = queryDocumentSnapshot.data();
-      setState(() {
-        userDOB = data['dob'];
-        userCountry = data['country'];
-      });
-      // print("My name is $userName");
-    }
   }
-
-  var nam = LoginPage.userCred?.user?.displayName;
-  var mil = LoginPage.userCred?.user?.email;
-  var pho = LoginPage.userCred?.user?.photoURL;
 
   String? docId;
   getUserDocID() async {
@@ -459,7 +439,7 @@ class _UpdateProfileState extends State<UpdateProfile>
                                       backgroundColor: Colors.black,
                                       radius: 65,
                                     )
-                                  : const SizedBox.shrink(),
+                                : const SizedBox.shrink(),
                         ),
                       ),
                       Positioned(
@@ -519,7 +499,7 @@ class _UpdateProfileState extends State<UpdateProfile>
                       ),
                       fillColor: Colors.white,
                       filled: true,
-                      hintText: "Name: ${nam ?? (userName ?? nul)}",
+                      hintText: "Name: ${userName ?? nul}",
                       border: OutlineInputBorder(
                         borderRadius: BorderRadius.circular(15),
                       ),
