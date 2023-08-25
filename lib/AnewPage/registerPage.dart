@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -579,6 +580,23 @@ class _RegisterPageState extends State<RegisterPage>
                                     } catch (e) {
                                       print(" Line Register Page 589 $e");
                                     }
+                                  }
+                                  else {
+                                    FirebaseAuth.instance.currentUser?.sendEmailVerification();
+                                    ScaffoldMessenger.of(context)
+                                        .showSnackBar(const SnackBar(
+                                        content: Text(
+                                          "Now Verify your E-mail",
+                                          style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.red,
+                                          ),
+                                          textAlign: TextAlign.center,
+                                        )));
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) => LoginPage()));
                                   }
                                 })),
                       ],

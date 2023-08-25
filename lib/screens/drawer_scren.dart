@@ -116,11 +116,11 @@ class _DrawerScreenState extends State<DrawerScreen> {
                      Container(
                         alignment: Alignment.center,
                         child:
-                        pho!=null?CircleAvatar(
-                            backgroundImage: NetworkImage(pho!),
-                            radius: 60,
-                            backgroundColor: Colors.transparent
-                        ):
+                        // pho!=null?CircleAvatar(
+                        //     backgroundImage: NetworkImage(pho!),
+                        //     radius: 60,
+                        //     backgroundColor: Colors.transparent
+                        // ):
                         userImage!=null?CircleAvatar(
                           backgroundImage: NetworkImage(userImage!),
                           radius: 60,
@@ -128,10 +128,8 @@ class _DrawerScreenState extends State<DrawerScreen> {
                         ):const SizedBox.shrink(),
                     ),
                     const SizedBox(height: 20,),
-                    nam!=null?Text(nam!,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600
-                        ,color: textColor)):
                     userName!=null?Text(userName!,style: TextStyle(fontSize: 20,fontWeight: FontWeight.w600
-                    ,color: textColor),):const Text("Default User"),
+                        ,color: textColor)):const Text("Default User"),
                   ],
                 ),
               ),

@@ -17,7 +17,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   String? userName, userImage, userEmail,userPhoto,userCountry,userDOB,phoneNum,creationDate,lastSignDate;
   var collection = FirebaseFirestore.instance.collection('NewUsers');
 
+   bool isEmail = false;
+   bool isAnom = false;
+
   Future<void> getUserData() async {
+    final user = FirebaseAuth.instance.currentUser;
+    await user?.reload();
+    isEmail = user!.emailVerified;
     var querySnapshot = await collection.get();
     for (var queryDocumentSnapshot in querySnapshot.docs) {
       Map<String, dynamic> data = queryDocumentSnapshot.data();
@@ -31,46 +37,21 @@ class _PersonalDetailsState extends State<PersonalDetails> {
     }
   }
 
-  getOtherDetails() async {
-    var querySnapshot = await collection.get();
-    for (var queryDocumentSnapshot in querySnapshot.docs) {
-      Map<String, dynamic> data = queryDocumentSnapshot.data();
-      setState(() {
-        userDOB = data['dob'];
-        userCountry = data['country'];
-      });
-    }
-  }
-
-  bool isEmail = false;
-  bool isAnom = false;
-
   @override
   void initState() {
-    if (LoginPage.userCred?.user != null){
-    userImage = LoginPage.userCred?.user?.photoURL;
-    userName = LoginPage.userCred?.user?.displayName;
-    userEmail = LoginPage.userCred?.user?.email;
-    phoneNum = LoginPage.userCred?.user?.uid;
-    getOtherDetails();
-    }
-    else if (LoginPage.userCred?.user==null){
     getUserData();
-    }
-
     FirebaseAuth.instance
         .authStateChanges()
-        .listen((User? user) {
+        .listen((User? user) async {
       if (user == null) {
         print('User is currently signed out!');
       } else {
         creationDate = user.metadata.creationTime.toString().substring(0,10).split("-").reversed.join("-");
         lastSignDate = user.metadata.lastSignInTime.toString().substring(0,10).split("-").reversed.join("-");
-        isEmail= user.emailVerified;
         isAnom = user.isAnonymous;
+        // final uses = FirebaseAuth.instance.currentUser;
       }
     });
-
     super.initState();
   }
 
@@ -95,36 +76,21 @@ class _PersonalDetailsState extends State<PersonalDetails> {
         child: Column(
           children: [
             const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
-            // ListTile(
-            //   leading: CircleAvatar(
-            //     radius: 65,
-            //     backgroundImage: NetworkImage(photo!),
-            //   ),
-            //   title: name!=null?Text(name!):Text("Null"),
-            //   shape: RoundedRectangleBorder(
-            //     borderRadius: BorderRadius.circular(10)
-            //   ),
-            //   style: ListTileStyle.list,
-            //   horizontalTitleGap: 0,
-            //   titleAlignment: ListTileTitleAlignment.titleHeight,
-            //   titleTextStyle: TextStyle(fontSize: 18,color: Colors.black),
-            //   subtitle: mail!=null?Text(mail!):Text("Null"),
-            //   subtitleTextStyle: TextStyle(fontSize: 15,color: Colors.black),
-            // ),
             Row(
               children: [
                 Container(
-                  height: MediaQuery.of(context).size.height*0.11,
-                  width: MediaQuery.of(context).size.width*0.35,
-                  child: CircleAvatar(
-                    backgroundImage: NetworkImage(photo!),
-                  ),
+                  height: MediaQuery.of(context).size.height*0.13,
+                  width: MediaQuery.of(context).size.width*0.32,
+                  child: userImage!=null?CircleAvatar(
+                    backgroundImage: NetworkImage(userImage!),
+                  ):const SizedBox.shrink(),
                 ),
                 const SizedBox(width: 10,),
                 Column(
                   children: [
-                    userName!=null?Text(userName!,style: TextStyle(fontSize: 18.5,color: Colors.black),):const SizedBox.shrink(),
-                    userEmail!=null?Text(userEmail!,style: TextStyle(fontSize: 16.2,color: Colors.black),textAlign: TextAlign.center,):const SizedBox.shrink(),
+                    userName!=null?Text(userName!,style:const  TextStyle(fontSize: 17.5,color: Colors.black),):const SizedBox.shrink(),
+                    userEmail!=null?Text(userEmail!,style: const TextStyle(fontSize: 14.2,color: Colors.black),textAlign: TextAlign.center,
+                    maxLines: 2,):const SizedBox.shrink(),
                   ],
                 )
               ],
@@ -140,35 +106,35 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                userDOB!=null?Text("User Date of Birth :- $userDOB"):const Text("User Date of Birth :- NA")
+                userDOB!=null?Text("User's Date of Birth :- $userDOB"):const Text("User Date of Birth :- NA")
               ],
             ),
             const SizedBox(height: 40,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                creationDate!=null?Text("Creation Date :- $creationDate"):Text("Creation Date :- NA")
+                creationDate!=null?Text("Account Creation Date :- $creationDate"):Text("Creation Date :- NA")
               ],
             ),
             const SizedBox(height: 40,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                lastSignDate!=null?Text("Creation Date :- $lastSignDate"):Text("Creation Date :- NA")
+                lastSignDate!=null?Text("Last Sign-In Date :- $lastSignDate"):Text("Creation Date :- NA")
               ],
             ),
             const SizedBox(height: 40,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                isEmail?Text("E-Mail Verified :- Yes, Verified"):Text("E-Mail Verified :- Sorry, But No"),
+                isEmail?const Text("E-Mail Verified :- Yes, Verified"):const Text("E-Mail Verified :- Sorry, But No"),
               ],
             ),
             const SizedBox(height: 40,),
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-                isAnom?Text("E-Mail Anonymous :- Yes, Private"):Text("E-Mail Anonymous :- Not Anonymous"),
+                isAnom?const Text("E-Mail Anonymous :- Yes, Private"):const Text("E-Mail Anonymous :- Not Anonymous"),
               ],
             ),
           ],

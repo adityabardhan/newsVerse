@@ -495,6 +495,19 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                     textAlign: TextAlign.center,
                                   )));
                             }
+                            else if (!user.emailVerified){
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    "Verify Your E-mail First",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
+                                  )));
+                            }
                           }
                         }
                       },

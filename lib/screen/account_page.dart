@@ -294,7 +294,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         //       color: textColor),):
                         userName!= null ?
                         Text(
-                          userName!,
+                          userName.toString()!,
                                 style: TextStyle(
                                     fontSize: 19,
                                     fontWeight: FontWeight.w600,
@@ -381,7 +381,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       trailing: GestureDetector(
                         onTap: (){
                           Navigator.push(context, Transition(child: const PersonalDetails(),
-                              transitionEffect: TransitionEffect.SCALE,curve: Curves.ease,));
+                              transitionEffect: TransitionEffect.RIGHT_TO_LEFT,curve: Curves.ease,));
                         },
                         child: Container(
                         alignment: Alignment.center,
@@ -407,29 +407,47 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(100),
                             color: trailFillOne),
                         child: Icon(
-                          Icons.settings_rounded,
+                          Icons.https_rounded,
                           color: iconColor,
                           size: 28,
                         ),
                       ),
-                      title: Text("Settings",
+                      title: Text("Re-Authentication",
                           style: TextStyle(
                               fontSize: 17,
                               color: textColor.withOpacity(0.9),
                               fontWeight: FontWeight.w500)),
-                      trailing: Container(
-                      alignment: Alignment.center,
-                      width: 30,
-                      height: 30,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(100),
-                          color: trailFillOne),
-                      child: Icon(
-                        LineAwesomeIcons.angle_double_right,
-                        color: trailFillTwo,
-                        size: 20,
+                      trailing: GestureDetector(
+                        onTap: (){
+                          if (LoginPage.userCred?.user==null){
+                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const ReAuthenticateUser()));
+                          }
+                          else {
+                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                                duration: Duration(seconds: 3),
+                                backgroundColor: Colors.white,
+                                content: Text(
+                                  "Log in via Email & Password for this Feature",
+                                  style: TextStyle(
+                                      fontSize: 15, color: Colors.red, fontWeight: FontWeight.w400),
+                                  textAlign: TextAlign.center,
+                                )));
+                          }
+                        },
+                        child: Container(
+                          alignment: Alignment.center,
+                          width: 30,
+                          height: 30,
+                          decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(100),
+                              color: trailFillOne),
+                          child: Icon(
+                            LineAwesomeIcons.angle_double_right,
+                            color: trailFillTwo,
+                            size: 20,
+                          ),
+                        ),
                       ),
-                    ),
                     ),
                     ListTile(
                       leading: Container(
@@ -487,31 +505,61 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(100),
                             color: trailFillOne),
                         child: Icon(
-                          Icons.https_rounded,
+                          MdiIcons.cardAccountMail,
                           color: iconColor,
-                          size: 28,
+                          size: 24,
                         ),
                       ),
-                      title: Text("Re-Authentication",
+                      title: Text("Verify E-Mail",
                           style: TextStyle(
                               fontSize: 17,
                               color: textColor.withOpacity(0.9),
                               fontWeight: FontWeight.w500)),
                       trailing: GestureDetector(
-                        onTap: (){
-                          if (LoginPage.userCred?.user==null){
-                            Navigator.push(context, MaterialPageRoute(builder: (context)=>const ReAuthenticateUser()));
-                          }
-                          else {
-                            ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                                duration: Duration(seconds: 3),
+                        onTap: () async {
+                          final users =  FirebaseAuth.instance.currentUser;
+                          await user?.reload();
+                          if (users!.emailVerified){
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(const SnackBar(
                                 backgroundColor: Colors.white,
                                 content: Text(
-                                  "Log in via Email & Password for this Feature",
+                                  "Your E-Mail is already Verified",
                                   style: TextStyle(
-                                      fontSize: 15, color: Colors.red, fontWeight: FontWeight.w400),
+                                      fontSize: 15,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.center,
                                 )));
+                          }
+                          else {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(
+                                backgroundColor: Colors.white,
+                                content: Text(
+                                  "You can verify your email @ ${userMail?.substring(0,10)!} ... ",maxLines: 1,
+                                  style: const TextStyle(
+                                      fontSize: 15,
+                                      color: Colors.green,
+                                      fontWeight: FontWeight.w400),
+                                  textAlign: TextAlign.center,
+                                )));
+                            try{
+                              FirebaseAuth.instance.currentUser?.sendEmailVerification();
+                            }
+                            on FirebaseAuthException catch(e){
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    "Operation Cannot be Performed. Try Later",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
+                                  )));
+                            }
                           }
                         },
                         child: Container(

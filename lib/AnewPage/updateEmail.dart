@@ -6,6 +6,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:lottie/lottie.dart';
 import 'package:newsverse/AnewPage/loginPage.dart';
+import 'package:transition/transition.dart';
 
 class UpdateEmail extends StatefulWidget {
   const UpdateEmail({super.key});
@@ -40,13 +41,12 @@ class _UpdateEmailState extends State<UpdateEmail>
       docId = document.id;
     });
     try {
-      if (FirebaseAuth.instance.currentUser!.emailVerified){
+        await FirebaseAuth.instance.currentUser
+            ?.updateEmail(mail.text);
         FirebaseFirestore.instance
             .collection("NewUsers")
             .doc(docId)
             .update({"mail": mail.text});
-        await FirebaseAuth.instance.currentUser
-            ?.updateEmail(mail.text);
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
           backgroundColor: Colors.white,
             content: Text(
@@ -57,31 +57,15 @@ class _UpdateEmailState extends State<UpdateEmail>
               ),
               textAlign: TextAlign.center,
             )));
+        Navigator.push(context, Transition(child: LoginPage(),transitionEffect: TransitionEffect.FADE));
       }
-      else{
-        await FirebaseAuth.instance.currentUser?.verifyBeforeUpdateEmail(mail.text);
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-            content: Text(
-              "Verify Your Email First",
-              style: TextStyle(
-                fontSize: 15,
-                color: Colors.red,
-              ),
-              textAlign: TextAlign.center,
-            )));
-      }
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => LoginPage()));
       // showLottieFile();
-    }
     on FirebaseAuthException catch (e) {
         ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
             shape: RoundedRectangleBorder(),
             content: Center(
                 child: Text(
-              'Cannot Perform Action.Retry Again',
+              'Cannot Perform Action.Please Re-Authenticate',
               style: TextStyle(
                   fontFamily: 'CourierPrime',
                   color: Colors.red,
@@ -162,7 +146,7 @@ class _UpdateEmailState extends State<UpdateEmail>
                   child: isDone
                       ? Center(
                           child: CircularProgressIndicator(
-                            color: Colors.redAccent.shade100,
+                            color: Colors.yellowAccent.shade400,
                           ),
                         )
                       : Text("Update Email",
