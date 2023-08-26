@@ -1,7 +1,9 @@
 import 'dart:async';
-
 import 'package:after_layout/after_layout.dart';
+import 'package:animated_splash_screen/animated_splash_screen.dart';
+import 'package:easy_splash_screen/easy_splash_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:hive/hive.dart';
@@ -68,7 +70,7 @@ class _MyAppState extends State<MyApp> {
   User? user;
 
   @override
-  void initState() {
+  void initState(){
     getTheme();
     super.initState();
     user = FirebaseAuth.instance.currentUser;
@@ -78,28 +80,48 @@ class _MyAppState extends State<MyApp> {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: user == null ?  LoginPage() : const Dashboard(),
-      home: StreamBuilder<User?>(
-          stream: FirebaseAuth.instance.authStateChanges(),
-          builder: (BuildContext context, AsyncSnapshot snapshot) {
-            if (user==null){
-               return LoginPage();
-            }
-            else if(user!=null){
-              return const Dashboard();
-            }
-            return const Center(child: CircularProgressIndicator(color: Colors.white,));
-          }
-
-        // if (snapshot.hasData){
-        //   return const Dashboard();
-        // }
-        // else {
-        //   return LoginPage();
-        // }
-        // return const Center(child: CircularProgressIndicator(color: Colors.white,),);
-      ),
+      home: EasySplashScreen(
+        logo: Image.asset("assets/images/ss.png",fit: BoxFit.cover),
+        logoWidth: MediaQuery.of(context).size.width*0.4,
+        title:const Text(
+          "NewsVerse\n' Unleashing the Power of Innovation '",textAlign: TextAlign.center,
+          style: TextStyle(
+            fontSize: 19,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        backgroundColor: Colors.grey.shade100,
+        showLoader: true,
+        loaderColor: Colors.black38,
+        loadingText: const Text("Riding on the waves of Knowledge",style: TextStyle(fontSize: 13.5,fontWeight: FontWeight.w400,color: Colors.black),),
+        navigator: user==null?LoginPage():const Dashboard(),
+        durationInSeconds: 10,
+      )
     );
+    // return MaterialApp(
+    //   debugShowCheckedModeBanner: false,
+    //   // home: user == null ?  LoginPage() : const Dashboard(),
+    //   home: StreamBuilder<User?>(
+    //       stream: FirebaseAuth.instance.authStateChanges(),
+    //       builder: (BuildContext context, AsyncSnapshot snapshot) {
+    //         if (user==null){
+    //            return LoginPage();
+    //         }
+    //         else if(user!=null){
+    //           return const Dashboard();
+    //         }
+    //         return const Center(child: CircularProgressIndicator(color: Colors.white,));
+    //       }
+    //
+    //     // if (snapshot.hasData){
+    //     //   return const Dashboard();
+    //     // }
+    //     // else {
+    //     //   return LoginPage();
+    //     // }
+    //     // return const Center(child: CircularProgressIndicator(color: Colors.white,),);
+    //   ),
+    // );
   }
 }
 

@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:animated_icon_button/animated_icon_button.dart';
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -426,7 +427,7 @@ class _UpdateProfileState extends State<UpdateProfile>
                               ? CircleAvatar(
                                   backgroundColor: Colors.transparent,
                                   radius: 63,
-                                  backgroundImage: MemoryImage(secondImage!),
+                                    backgroundImage: MemoryImage(secondImage!),
                                   // ClipRRect(
                                   //     borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height*0.1),
                                   //     child: Image.file(image!,fit: BoxFit.cover,height: MediaQuery.of(context).size.height*0.21,
