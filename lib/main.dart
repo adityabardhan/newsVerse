@@ -19,6 +19,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:transition/transition.dart';
+import 'AccountDirectPage/splashScreen.dart';
 import 'AnewPage/loginPage.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 
@@ -94,8 +95,8 @@ class _MyAppState extends State<MyApp> {
         showLoader: true,
         loaderColor: Colors.black38,
         loadingText: const Text("Riding on the waves of Knowledge",style: TextStyle(fontSize: 13.5,fontWeight: FontWeight.w400,color: Colors.black),),
-        navigator: user==null?LoginPage():const Dashboard(),
-        durationInSeconds: 10,
+        navigator: user==null?const OnBoardingScreen():const Dashboard(),
+        durationInSeconds: 5,
       )
     );
     // return MaterialApp(
