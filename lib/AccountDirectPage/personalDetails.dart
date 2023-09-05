@@ -1,6 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:line_awesome_flutter/line_awesome_flutter.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsverse/screen/account_page.dart';
 
 import '../AnewPage/loginPage.dart';
@@ -67,7 +70,13 @@ class _PersonalDetailsState extends State<PersonalDetails> {
             fontSize: 19.5,
             color: Colors.black.withOpacity(0.9))),
         centerTitle: true,
-        automaticallyImplyLeading: true,
+        automaticallyImplyLeading: false,
+        leading: IconButton(
+          icon: const Icon(Icons.arrow_back_rounded,color: Colors.black,),
+          onPressed: (){
+            Navigator.pop(context);
+          },
+        ),
         backgroundColor: Colors.grey.shade100,
         elevation: 0,
       ),
@@ -137,9 +146,182 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 isAnom?const Text("E-Mail Anonymous :- Yes, Private"):const Text("E-Mail Anonymous :- Not Anonymous"),
               ],
             ),
+            SizedBox(height: MediaQuery.of(context).size.height*0.15,),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                InkWell(
+                  onTap: () async {
+                    final users = FirebaseAuth.instance.currentUser;
+                    await FirebaseAuth.instance.currentUser?.reload();
+                    if (users!.emailVerified) {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(
+                          backgroundColor: Colors.white,
+                          content: Text(
+                            "Your E-Mail is already Verified",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.green,
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.center,
+                          )));
+                    }
+                    else {
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(
+                          backgroundColor: Colors.white,
+                          content: Text(
+                            "You can now verify your email", maxLines: 1,
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.green,
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.center,
+                          )));
+                      try {
+                        FirebaseAuth.instance.currentUser
+                            ?.sendEmailVerification();
+                      }
+                      on FirebaseAuthException catch (e) {
+                        ScaffoldMessenger.of(context)
+                            .showSnackBar(const SnackBar(
+                            backgroundColor: Colors.white,
+                            content: Text(
+                              "Operation Cannot be Performed. Try Later",
+                              style: TextStyle(
+                                  fontSize: 15,
+                                  color: Colors.red,
+                                  fontWeight: FontWeight.w400),
+                              textAlign: TextAlign.center,
+                            )));
+                      }
+                    }
+                  },
+                  splashColor: Colors.transparent,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      // Icon(Icons.alternate_email_outlined,color: Colors.black87.withOpacity(0.7),),
+                      Icon(Icons.alternate_email_outlined,color: Colors.green.shade700,),
+                      SizedBox(width: 5,),
+                      Text("Verify your Email",style: TextStyle(fontWeight: FontWeight.w400,fontStyle: FontStyle.italic),)
+                    ],
+                  ),
+                ),
+                InkWell(
+                  onTap: (){
+
+                  },
+                  splashColor: Colors.transparent,
+                  child: Row(
+                    children: [
+                      Icon(Icons.local_hospital_outlined,color: Colors.green.shade700,),
+                      SizedBox(width: 5,),
+                      Text("Upgrade to Pro",style: TextStyle(fontWeight: FontWeight.w400,fontStyle: FontStyle.italic),)
+                    ],
+                  ),
+                )
+              ],
+            ),
+            const SizedBox(height: 25,),
+            InkWell(
+              onTap: (){
+
+              },
+              splashColor: Colors.transparent,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(MdiIcons.emailPlus,color: Colors.green.shade600),
+                  const SizedBox(width: 5,),
+                  Text("Subscribe to our Email Letters",style: TextStyle(fontWeight: FontWeight.w400,fontStyle: FontStyle.italic),)
+                ],
+              ),
+            )
+            // Row(
+            //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+            //   children: [
+            //     InkWell(
+            //       onTap: (){
+            //
+            //       },
+            //       splashColor: Colors.transparent,
+            //       child:  Row(
+            //         children: [
+            //           Icon(Icons.phone_rounded,color: Colors.green,),
+            //           SizedBox(width: 7,),
+            //           Text("Contact Us",style: TextStyle(fontWeight: FontWeight.w500),)
+            //         ],
+            //       ),
+            //     ),
+            //     InkWell(
+            //       onTap: (){
+            //
+            //       },
+            //       splashColor: Colors.transparent,
+            //       child: Row(
+            //         children: [
+            //           Icon(Icons.report_problem,color:Colors.green),
+            //           SizedBox(width: 7,),
+            //           Text("Report Problem",style: TextStyle(fontWeight: FontWeight.w500),)
+            //         ],
+            //       ),
+            //     ),
+            //   ],
+            // )
           ],
         ),
       ),
     );
   }
 }
+
+/*
+onTap: () async {
+                  final users =  FirebaseAuth.instance.currentUser;
+                  await FirebaseAuth.instance.currentUser?.reload();
+                  if (users!.emailVerified){
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(
+                        backgroundColor: Colors.white,
+                        content: Text(
+                          "Your E-Mail is already Verified",
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.green,
+                              fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.center,
+                        )));
+                  }
+                  else {
+                    ScaffoldMessenger.of(context)
+                        .showSnackBar(const SnackBar(
+                        backgroundColor: Colors.white,
+                        content: Text(
+                          "You can now verify your email",maxLines: 1,
+                          style: TextStyle(
+                              fontSize: 15,
+                              color: Colors.green,
+                              fontWeight: FontWeight.w400),
+                          textAlign: TextAlign.center,
+                        )));
+                    try{
+                      FirebaseAuth.instance.currentUser?.sendEmailVerification();
+                    }
+                    on FirebaseAuthException catch(e){
+                      ScaffoldMessenger.of(context)
+                          .showSnackBar(const SnackBar(
+                          backgroundColor: Colors.white,
+                          content: Text(
+                            "Operation Cannot be Performed. Try Later",
+                            style: TextStyle(
+                                fontSize: 15,
+                                color: Colors.red,
+                                fontWeight: FontWeight.w400),
+                            textAlign: TextAlign.center,
+                          )));
+                    }
+                  }
+                },
+ */

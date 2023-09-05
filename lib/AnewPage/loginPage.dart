@@ -15,6 +15,7 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:lottie/lottie.dart';
 import 'package:newsverse/AnewPage/registerPage.dart';
 import 'package:newsverse/screens/home_screen.dart';
+import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transition/transition.dart';
 
@@ -431,11 +432,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                       fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.center,
                                 )));
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        const Dashboard()));
+                            Navigator.push(context, PageTransition(child: const Dashboard(), type: PageTransitionType.size,
+                            duration: const Duration(milliseconds: 300)));
                           });
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {

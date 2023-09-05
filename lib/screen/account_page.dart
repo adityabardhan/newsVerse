@@ -505,62 +505,75 @@ class _ProfilePageState extends State<ProfilePage> {
                             borderRadius: BorderRadius.circular(100),
                             color: trailFillOne),
                         child: Icon(
-                          MdiIcons.cardAccountMail,
+                          MdiIcons.phoneMessage,
                           color: iconColor,
                           size: 24,
                         ),
                       ),
-                      title: Text("Verify E-Mail",
+                      title: Text("Contact US",
                           style: TextStyle(
                               fontSize: 17,
                               color: textColor.withOpacity(0.9),
                               fontWeight: FontWeight.w500)),
                       trailing: GestureDetector(
-                        onTap: () async {
-                          final users =  FirebaseAuth.instance.currentUser;
-                          await user?.reload();
-                          if (users!.emailVerified){
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(const SnackBar(
-                                backgroundColor: Colors.white,
-                                content: Text(
-                                  "Your E-Mail is already Verified",
-                                  style: TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.center,
-                                )));
-                          }
-                          else {
-                            ScaffoldMessenger.of(context)
-                                .showSnackBar(SnackBar(
-                                backgroundColor: Colors.white,
-                                content: Text(
-                                  "You can verify your email @ ${userMail?.substring(0,10)!} ... ",maxLines: 1,
-                                  style: const TextStyle(
-                                      fontSize: 15,
-                                      color: Colors.green,
-                                      fontWeight: FontWeight.w400),
-                                  textAlign: TextAlign.center,
-                                )));
-                            try{
-                              FirebaseAuth.instance.currentUser?.sendEmailVerification();
-                            }
-                            on FirebaseAuthException catch(e){
-                              ScaffoldMessenger.of(context)
-                                  .showSnackBar(const SnackBar(
-                                  backgroundColor: Colors.white,
-                                  content: Text(
-                                    "Operation Cannot be Performed. Try Later",
-                                    style: TextStyle(
-                                        fontSize: 15,
-                                        color: Colors.red,
-                                        fontWeight: FontWeight.w400),
-                                    textAlign: TextAlign.center,
-                                  )));
-                            }
-                          }
+                        // onTap: () async {
+                        //   final users =  FirebaseAuth.instance.currentUser;
+                        //   await user?.reload();
+                        //   if (users!.emailVerified){
+                        //     ScaffoldMessenger.of(context)
+                        //         .showSnackBar(const SnackBar(
+                        //         backgroundColor: Colors.white,
+                        //         content: Text(
+                        //           "Your E-Mail is already Verified",
+                        //           style: TextStyle(
+                        //               fontSize: 15,
+                        //               color: Colors.green,
+                        //               fontWeight: FontWeight.w400),
+                        //           textAlign: TextAlign.center,
+                        //         )));
+                        //   }
+                        //   else {
+                        //     ScaffoldMessenger.of(context)
+                        //         .showSnackBar(SnackBar(
+                        //         backgroundColor: Colors.white,
+                        //         content: Text(
+                        //           "You can verify your email @ ${userMail?.substring(0,10)!} ... ",maxLines: 1,
+                        //           style: const TextStyle(
+                        //               fontSize: 15,
+                        //               color: Colors.green,
+                        //               fontWeight: FontWeight.w400),
+                        //           textAlign: TextAlign.center,
+                        //         )));
+                        //     try{
+                        //       FirebaseAuth.instance.currentUser?.sendEmailVerification();
+                        //     }
+                        //     on FirebaseAuthException catch(e){
+                        //       ScaffoldMessenger.of(context)
+                        //           .showSnackBar(const SnackBar(
+                        //           backgroundColor: Colors.white,
+                        //           content: Text(
+                        //             "Operation Cannot be Performed. Try Later",
+                        //             style: TextStyle(
+                        //                 fontSize: 15,
+                        //                 color: Colors.red,
+                        //                 fontWeight: FontWeight.w400),
+                        //             textAlign: TextAlign.center,
+                        //           )));
+                        //     }
+                        //   }
+                        // },
+                        onTap: (){
+                          ScaffoldMessenger.of(context)
+                              .showSnackBar(const SnackBar(
+                              backgroundColor: Colors.white,
+                              content: Text(
+                                "Sorry for the Inconvenience\nUpgrade to Pro to avail this feature",
+                                style: TextStyle(
+                                    fontSize: 15,
+                                    color: Colors.red,
+                                    fontWeight: FontWeight.w400),
+                                textAlign: TextAlign.center,
+                              )));
                         },
                         child: Container(
                           alignment: Alignment.center,
