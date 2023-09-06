@@ -70,15 +70,15 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
       if(scrollController.offset > showoffset){
         showButton = true;
         if (mounted){
-          setState(() {
-          });
+          // setState(() {
+          // });
         }
       }else{
         showButton = false;
-        if (mounted){
-          setState(() {
-          });
-        }
+        // if (mounted){
+        //   setState(() {
+        //   });
+        // }
       }
     });
   }
@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
         }
       }
       Fluttertoast.showToast(
-          msg: "Showing Breaking News",
+          msg: "Feed Updated to Latest News",
           gravity: ToastGravity.BOTTOM,
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.white,textColor: Colors.black
@@ -246,167 +246,111 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     return WillPopScope(
       onWillPop: exitOverride,
 
-      child: GestureDetector(
-        // onPanUpdate: (details){
-        //   if(details.delta.dx == null)return;
-        //   if (details.delta.dx < 0){
-        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>const DiscoveryPage()));
-        //   }
-        // },
-        // onHorizontalDragEnd: (DragEndDetails details){
-        //   if (details.primaryVelocity! > 0) {
-        //     return;
-        //   } else if (details.primaryVelocity! < 0) {
-        //     Navigator.push(context, MaterialPageRoute(builder: (context)=>const  DiscoveryPage()));
-        //   }
-        // },
-        child: Scaffold(
-          key: scaffoldKey,
-          backgroundColor: isLightTheme?Colors.grey.withOpacity(0.1):Colors.grey.shade900.withOpacity(0.9),
-          drawer: const DrawerScreen(),
-          drawerScrimColor: darkColor,
-          // bottomNavigationBar: const BottomNavBar("home"),
-          // appBar: AppBar(
-          //   iconTheme: IconThemeData(color: darkColor),
-          //   centerTitle: true,
-          //   systemOverlayStyle:
-          //   const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
-          //   backgroundColor: Colors.transparent,
-          //   elevation: 0.0,
-          //   title:
-          //       Text(
-          //         'NewsVerse',
-          //         style: TextStyle(color: darkColor,fontWeight: FontWeight.w700),
-          //       ),
-          //   actions: [
-          //     IconButton(
-          //       onPressed: () async {
-          //         Navigator.push(context, MaterialPageRoute(builder: (context)=>const InformationPage()));
-          //       },
-          //       color: darkColor,
-          //       splashRadius: 20,
-          //       icon: Icon(MdiIcons.informationSlabCircleOutline,color: darkColor,),
-          //     ),
-          //   ],
-          //   // toolbarHeight: MediaQuery.of(context).size.height*0.15,
-          // ),
-          body: Column(
-            children: [
-              const SizedBox(height: 20,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: Scaffold(
+        key: scaffoldKey,
+        backgroundColor: isLightTheme?Colors.grey.withOpacity(0.1):Colors.grey.shade900.withOpacity(0.9),
+        drawer: const DrawerScreen(),
+        drawerEnableOpenDragGesture: false,
+        drawerScrimColor: darkColor,
+        // bottomNavigationBar: const BottomNavBar("home"),
+        appBar: AppBar(
+          iconTheme: IconThemeData(color: darkColor),
+          centerTitle: true,
+          systemOverlayStyle:
+          const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
+          backgroundColor: Colors.transparent,
+          elevation: 0,
+          title:
+              Text(
+                'NewsVerse',
+                style: TextStyle(color: darkColor,fontWeight: FontWeight.w700,fontSize: 21),
+              ),
+          actions: [
+            IconButton(
+              onPressed: () async {
+                Navigator.push(context, MaterialPageRoute(builder: (context)=>const InformationPage()));
+              },
+              color: darkColor,
+              splashRadius: 20,
+              icon: Icon(MdiIcons.informationSlabCircleOutline,color: darkColor,size: 24,),
+            ),
+          ],
+          // toolbarHeight: MediaQuery.of(context).size.height*0.15,
+        ),
+        body: Container(
+          padding:const EdgeInsets.only(top: 2.5),
+          child: _loading ?
+               Shimmer.fromColors(
+            baseColor: baseColor,
+            highlightColor: highlightColor,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics:const  BouncingScrollPhysics(
+                decelerationRate: ScrollDecelerationRate.normal
+              ),
+              itemCount: 20,
+              itemBuilder: (BuildContext context, int index) {
+                return ShimmerNewsTile();
+              },
+            ),
+          )
+              : _articleExists ?
+          RefreshIndicator(
+            color: isLightTheme?Colors.black:Colors.white,
+            backgroundColor: isLightTheme?Colors.white:Colors.black54,
+            child: ListView.builder(
+              scrollDirection: Axis.vertical,
+              shrinkWrap: true,
+              physics:const  ClampingScrollPhysics(),
+              itemCount: catModelList.length,
+              itemBuilder: (context,index){
+                // return NewsTile(
+                //   image: articles[index].image,
+                //   title: articles[index].title,
+                //   content: articles[index].content,
+                //   date: articles[index].publishedDate,
+                //   fullArticle: articles[index].fullArticle,
+                // );
+                return SecondNewsTile(
+                  index: index,title: catModelList[index].newsHead,
+                  description: catModelList[index].newDes,
+                  image: catModelList[index].newImage,
+                  url: catModelList[index].newUrl,
+                  date: catModelList[index].published,
+                  content: catModelList[index].content
+                );
+              },
+            ),
+            onRefresh: () => getNewsByQuery(),
+          )
+             : !_articleExists? Container(
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  IconButton(
-                    tooltip: "Menu",
-                    padding:const EdgeInsets.only(left: 12),
+                  Text(" No data available ",style: TextStyle(color: !isLightTheme? Colors.deepOrangeAccent.shade400:Colors.red,fontSize: 21,
+                  decoration: TextDecoration.lineThrough,decorationColor: !isLightTheme?Colors.white:Colors.black),),
+                  TextButton(
+                    child: Text('Click Me to Retry!',style: TextStyle(color: isLightTheme? Colors.black:Colors.white,fontSize: 15,
+                    decoration: TextDecoration.none,decorationColor: Colors.red.shade300,decorationStyle: TextDecorationStyle.solid)),
                     onPressed: () {
-                      if (mounted){
-                        setState(() {
-                          scaffoldKey.currentState?.openDrawer();
-                        });
+                      if (!_articleExists) {
+                        if (mounted){
+                          setState(() {
+                            _retryBtnDisabled = true;
+                          });
+                        }
+                        getNewsByQuery();
                       }
                     },
-                    color: darkColor,
-                    splashRadius: 20,
-                    icon: Icon(Icons.menu_rounded,color: darkColor,),
-                  ),
-                  Center(
-                    child: Text(
-                      'NewsVerse',textAlign: TextAlign.center,
-                      style: TextStyle(color: darkColor,fontWeight: FontWeight.w600,fontSize: 21),
-                    ),
-                  ),
-                  IconButton(
-                    padding:const EdgeInsets.only(right: 10),
-                    onPressed: () async {
-                      Navigator.push(context, MaterialPageRoute(builder: (context)=>const InformationPage()));
-                    },
-                    color: darkColor,
-                    splashRadius: 20,
-                    icon: Icon(MdiIcons.informationSlabCircleOutline,color: darkColor,),
                   ),
                 ],
               ),
-              // const SizedBox(height: 7,),
-              Expanded(
-                child: Container(
-                  // margin:const EdgeInsets.only(top: 7),
-                  child: _loading ?
-                       Shimmer.fromColors(
-                    baseColor: baseColor,
-                    highlightColor: highlightColor,
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      physics:const  BouncingScrollPhysics(
-                        decelerationRate: ScrollDecelerationRate.normal
-                      ),
-                      itemCount: 20,
-                      itemBuilder: (BuildContext context, int index) {
-                        return ShimmerNewsTile();
-                      },
-                    ),
-                  )
-                      : _articleExists ?
-                  RefreshIndicator(
-                    color: isLightTheme?Colors.black:Colors.white,
-                    backgroundColor: isLightTheme?Colors.white:Colors.black54,
-                    child: ListView.builder(
-                      scrollDirection: Axis.vertical,
-                      shrinkWrap: true,
-                      physics:const  ClampingScrollPhysics(),
-                      itemCount: catModelList.length,
-                      itemBuilder: (context,index){
-                        // return NewsTile(
-                        //   image: articles[index].image,
-                        //   title: articles[index].title,
-                        //   content: articles[index].content,
-                        //   date: articles[index].publishedDate,
-                        //   fullArticle: articles[index].fullArticle,
-                        // );
-                        return SecondNewsTile(
-                          index: index,title: catModelList[index].newsHead,
-                          description: catModelList[index].newDes,
-                          image: catModelList[index].newImage,
-                          url: catModelList[index].newUrl,
-                          date: catModelList[index].published,
-                          content: catModelList[index].content
-                        );
-                      },
-                    ),
-                    onRefresh: () => getNewsByQuery(),
-                  )
-                     : !_articleExists? Container(
-                    child: Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(" No data available ",style: TextStyle(color: !isLightTheme? Colors.deepOrangeAccent.shade400:Colors.red,fontSize: 21,
-                          decoration: TextDecoration.lineThrough,decorationColor: !isLightTheme?Colors.white:Colors.black),),
-                          TextButton(
-                            child: Text('Click Me to Retry!',style: TextStyle(color: isLightTheme? Colors.black:Colors.white,fontSize: 15,
-                            decoration: TextDecoration.none,decorationColor: Colors.red.shade300,decorationStyle: TextDecorationStyle.solid)),
-                            onPressed: () {
-                              if (!_articleExists) {
-                                if (mounted){
-                                  setState(() {
-                                    _retryBtnDisabled = true;
-                                  });
-                                }
-                                getNewsByQuery();
-                              }
-                            },
-                          ),
-                        ],
-                      ),
-                    ),
-                  ):const Center(child: CircularProgressIndicator(color: Colors.red,),)
-                ),
-              ),
-            ],
-          ),
-
+            ),
+          ):const Center(child: CircularProgressIndicator(color: Colors.red,),)
         ),
+
       ),
     );
   }

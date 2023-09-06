@@ -7,6 +7,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_animated_icons/flutter_animated_icons.dart';
+import 'package:flutter_email_sender/flutter_email_sender.dart';
 import 'package:flutter_phoenix/flutter_phoenix.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -16,6 +17,7 @@ import 'package:lottie/lottie.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsverse/AccountDirectPage/personalDetails.dart';
 import 'package:newsverse/AccountDirectPage/reauthenticateUser.dart';
+import 'package:newsverse/AccountDirectPage/splashScreen.dart';
 import 'package:newsverse/AnewPage/loginPage.dart';
 import 'package:newsverse/AnewPage/registerPage.dart';
 import 'package:newsverse/helper/navigation_bar.dart';
@@ -27,6 +29,7 @@ import 'package:newsverse/screens/home_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:transition/transition.dart';
+import 'package:url_launcher/url_launcher.dart';
 import '../provider/theme_provider.dart';
 import '../screens/drawer_scren.dart';
 import '../screens/tabBar.dart';
@@ -38,10 +41,7 @@ class AccountPage extends StatefulWidget {
   State<AccountPage> createState() => _AccountPageState();
 }
 
-class _AccountPageState extends State<AccountPage> with AutomaticKeepAliveClientMixin<AccountPage> {
-
-  @override bool get wantKeepAlive => true;
-
+class _AccountPageState extends State<AccountPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -142,7 +142,7 @@ class _ProfilePageState extends State<ProfilePage> {
   //     });
   //   }
   // }
-
+  @override
   Future <bool> exitOverride() async{
     return (await showDialog(context: context,
         builder: (context)=> Container(
@@ -218,19 +218,19 @@ class _ProfilePageState extends State<ProfilePage> {
           backgroundColor: isLightTheme
               ? Colors.grey.withOpacity(0.1)
               : Colors.grey.shade900.withOpacity(0.8),
-          // bottomNavigationBar: const BottomNavBar("account"),
-          // appBar: AppBar(
-          //   backgroundColor: isLightTheme
-          //       ? Colors.white.withOpacity(0.15)
-          //       : Colors.grey.shade900.withOpacity(0.83),
-          //   elevation: 0,
-          //   title: Text("Profile",
-          //       style: TextStyle(
-          //           fontWeight: FontWeight.w500,
-          //           fontSize: 22,
-          //           color: textColor.withOpacity(0.85))),
-          //   centerTitle: true,
-          // ),
+          appBar: AppBar(
+            automaticallyImplyLeading: false,
+            backgroundColor: isLightTheme
+                ? Colors.white.withOpacity(0.01)
+                : Colors.grey.shade900.withOpacity(0.83),
+            elevation: 0,
+            title: Text("Profile",
+                style: TextStyle(
+                    fontWeight: FontWeight.w500,
+                    fontSize: 22,
+                    color: textColor.withOpacity(0.85))),
+            centerTitle: true,
+          ),
           body: WillPopScope(
             onWillPop: () async {
               Navigator.push(
@@ -247,13 +247,13 @@ class _ProfilePageState extends State<ProfilePage> {
                 padding: const EdgeInsets.fromLTRB(20, 10, 10, 10),
                 child: Column(
                   children: [
-                    SizedBox(height: MediaQuery.of(context).size.height*0.035,),
-                    Text("Profile",
-                        style: TextStyle(
-                            fontWeight: FontWeight.w500,
-                            fontSize: 22,
-                            color: textColor.withOpacity(0.85))),
-                    SizedBox(height: MediaQuery.of(context).size.height*0.03),
+                    // SizedBox(height: MediaQuery.of(context).size.height*0.035,),
+                    // Text("Profile",
+                    //     style: TextStyle(
+                    //         fontWeight: FontWeight.w500,
+                    //         fontSize: 22,
+                    //         color: textColor.withOpacity(0.85))),
+                    // SizedBox(height: MediaQuery.of(context).size.height*0.03),
                     Container(
                       alignment: Alignment.center,
                       child: CircleAvatar(
@@ -562,18 +562,39 @@ class _ProfilePageState extends State<ProfilePage> {
                         //     }
                         //   }
                         // },
-                        onTap: (){
-                          ScaffoldMessenger.of(context)
-                              .showSnackBar(const SnackBar(
-                              backgroundColor: Colors.white,
-                              content: Text(
-                                "Sorry for the Inconvenience\nUpgrade to Pro to avail this feature",
-                                style: TextStyle(
-                                    fontSize: 15,
-                                    color: Colors.red,
-                                    fontWeight: FontWeight.w400),
-                                textAlign: TextAlign.center,
-                              )));
+                        onTap: () async {
+                          final userID = FirebaseAuth.instance.currentUser?.uid;
+                          const mail = "guptaaditya7907@gmail.com";
+                          var body = "Hello I'm user $userID and i found an issue in the application.\n";
+                          var url = 'mailto:$mail?subject=${"Bug Found in NewsVerse Application"}&body=$body';
+                          await launch(url);
+
+                          // final Uri params = Uri(
+                          //     scheme: 'mailto',
+                          //     path: 'guptaaditya7907@gmail.com',
+                          //     queryParameters: {
+                          //       'subject': 'Problem Occurred in NewsVerse App',
+                          //       'body': 'Full Content'
+                          //     }
+                          // );
+                          // String url = params.toString();
+                          // if (await canLaunch(url)) {
+                          //   await launch(url);
+                          // } else {
+                          //   print('Could not launch $url');
+                          // }
+                          //email app opened
+                          // ScaffoldMessenger.of(context)
+                          //     .showSnackBar(const SnackBar(
+                          //     backgroundColor: Colors.white,
+                          //     content: Text(
+                          //       "Sorry for the Inconvenience\nUpgrade to Pro to avail this feature",
+                          //       style: TextStyle(
+                          //           fontSize: 15,
+                          //           color: Colors.red,
+                          //           fontWeight: FontWeight.w400),
+                          //       textAlign: TextAlign.center,
+                          //     )));
                         },
                         child: Container(
                           alignment: Alignment.center,
@@ -629,17 +650,18 @@ class _ProfilePageState extends State<ProfilePage> {
                               size: 20,
                             ),
                             onPressed: () async {
-                              await themeProvider.toggleThemeData();
-                              setState(() {
-                                Navigator.of(context).pushAndRemoveUntil(
-                                    MaterialPageRoute(
-                                        builder: (context) => AccountPage()),
-                                    (Route<dynamic> route) => false);
-                              });
-                              // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
-                              //   return AppStart();
-                              // }));
-                            },
+                              //   await themeProvider.toggleThemeData();
+                              //   setState(() {
+                              //     Navigator.of(context).pushAndRemoveUntil(
+                              //         MaterialPageRoute(
+                              //             builder: (context) => AccountPage()),
+                              //         (Route<dynamic> route) => false);
+                              //   });
+                              //   // Navigator.pushReplacement(context, MaterialPageRoute(builder: (BuildContext context){
+                              //   //   return AppStart();
+                              //   // }));
+                              // },
+                            }
                           )
 
                               // child:  Switch(
@@ -693,7 +715,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               await FirebaseAuth.instance.signOut();
                               Navigator.of(context).pushAndRemoveUntil(
                                   MaterialPageRoute(
-                                      builder: (context) => LoginPage()),
+                                      builder: (context) => const OnBoardingScreen()),
                                       (Route<dynamic> route) => false);
                               ScaffoldMessenger.of(context)
                                   .showSnackBar(const SnackBar(

@@ -96,7 +96,7 @@ class _MyAppState extends State<MyApp> {
         loaderColor: Colors.black38,
         loadingText: const Text("Riding on the waves of Knowledge",style: TextStyle(fontSize: 13.5,fontWeight: FontWeight.w400,color: Colors.black),),
         navigator: user==null?const OnBoardingScreen():const Dashboard(),
-        durationInSeconds: 5,
+        durationInSeconds: 4,
       )
     );
     // return MaterialApp(

@@ -2,7 +2,6 @@
 
 import 'dart:async';
 import 'dart:io';
-
 import 'package:after_layout/after_layout.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -214,9 +213,365 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
   }
 
   // onWillPop: () async => false,
+  bool checkValue = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      body: SingleChildScrollView(
+        child: Container(
+          width: double.infinity,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                Colors.red.shade400,
+                Colors.red.shade200,
+                Colors.redAccent.shade100,
+                Colors.red.shade300.withOpacity(0.8),
+                Colors.red.shade500.withOpacity(0.5),
+                Colors.redAccent.shade100,
+                Colors.red.shade300,
+                Colors.red.shade400,
+              ]
+            )
+            // image: DecorationImage(
+            //   image: NetworkImage("https://img.freepik.com/premium-photo/soft-sky-with-cloud-background-pastel-color-abstract-gradat"
+            //       "ion-color-pastel_6529-31.jpg?size=626&ext=jpg&ga=GA1.1.1431409367.1693049691&semt=ais"),fit: BoxFit.cover
+            // )
+          ),
+          child: Column(
+            children: [
+              Container(
+                margin: EdgeInsets.only(top: MediaQuery.of(context).size.height/3.2,bottom: MediaQuery.of(context).size.height*0.3,
+                left: MediaQuery.of(context).size.width*0.05,right:MediaQuery.of(context).size.width*0.05 ),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(50),
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      Colors.amber.shade200,
+                      Colors.amber.shade500,
+                      Colors.amber.shade600,
+                      Colors.amber.shade300,
+                      Colors.amber.shade800,
+                    ]
+                  )
+                ),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 20,),
+                    const CircleAvatar(
+                      radius: 45,
+                      backgroundColor: Colors.transparent,
+                      backgroundImage: NetworkImage("https://t3.ftcdn.net/jpg/01/74/03/24/240_F_174032443_FllyFofFZj7JOPXGJl75UiEEeIq8AIeG.jpg",),
+                      // https://cdn-icons-png.flaticon.com/128/1946/1946429.png
+                      // https://cdn-icons-png.flaticon.com/128/3870/3870822.png
+                      // child: Image.network("https://t4.ftcdn.net/jpg/06/10/55/39/240_F_610553911_vEwu0gLuy9htQIjvCJ3cv71BXZWvpk1d.jpg",
+                      // height: MediaQuery.of(context).size.height*0.13,
+                      // width: MediaQuery.of(context).size.width*0.4),
+                    ),
+                    const SizedBox(height: 30,),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: TextFormField(
+                        keyboardType: TextInputType.emailAddress,
+                        controller: emailCont,
+                        autovalidateMode: AutovalidateMode.disabled,
+                        validator: (String? value) {
+                          if (value!.isEmpty) {
+                            return "Required Field";
+                          }
+                          if (value!.length < 5) {
+                            return "Enter Valid Email";
+                          }
+                          return null;
+                        },
+                        onSaved: (String? value) {
+                          emailCont.text = value.toString();
+                        },
+                        decoration: InputDecoration(
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(color: Colors.white),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide:
+                              BorderSide(color: Colors.grey.shade400),
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                            fillColor: Colors.grey.shade200,
+                            filled: true,
+                            hintText: "Email-Address",
+                            hintStyle: TextStyle(color: Colors.grey.shade600),
+                            //label:const Text("Enter Password"),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8))),
+                        textInputAction: TextInputAction.done,
+                      ),
+                    ),
+
+                    const SizedBox(
+                      height: 15,
+                    ),
+
+                    Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 25),
+                        child: TextFormField(
+                          validator: (String? value) {
+                            RegExp regex = RegExp(
+                                r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+                            if (value!.isEmpty) {
+                              return "Required Field";
+                            } else if (!regex.hasMatch(value)) {
+                              return "Invalid Password Format";
+                            }
+                            return null;
+                          },
+                          onSaved: (String? value) {
+                            passCont.text = value.toString();
+                          },
+                          autovalidateMode: AutovalidateMode.disabled,
+                          controller: passCont,
+                          obscureText: showPass,
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                borderSide:
+                                const BorderSide(color: Colors.white),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              focusedBorder: OutlineInputBorder(
+                                borderSide:
+                                BorderSide(color: Colors.grey.shade400),
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                              fillColor: Colors.grey.shade200,
+                              filled: true,
+                              hintText: "Password",
+                              hintStyle: TextStyle(color: Colors.grey.shade600),
+                              //label:const Text("Enter Password"),
+                              suffixIcon: IconButton(
+                                icon: showPass
+                                    ? const Icon(
+                                  FontAwesomeIcons.lock,
+                                  size: 25,
+                                )
+                                    : const Icon(FontAwesomeIcons.lockOpen,
+                                    size: 25),
+                                onPressed: togglePass,
+                                color: Colors.black54,
+                                splashRadius: 20,
+                              ),
+                              border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8))),
+                          keyboardType: TextInputType.visiblePassword,
+                          textInputAction: TextInputAction.go,
+                        )),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 25),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          FormField<bool>(
+                            initialValue: checkValue,
+                            builder: (FormFieldState<bool> state) {
+                              return Row(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      Checkbox(
+                                        activeColor: Colors.indigoAccent.shade200.withOpacity(0.8),
+                                        focusColor: Colors.black,
+                                        value: state.value,
+                                        onChanged: (bool? val) =>
+                                            setState(() {
+                                              checkValue = val!;
+                                              state.didChange(val);
+                                            }),
+                                      ),
+                                      const Text("Remember Me"),
+                                    ],
+                                  ),
+                                ],
+                              );
+                            },
+                            // 7
+                          ),
+                          GestureDetector(
+                            child: Text(
+                              "Forgot Password?",
+                              style: TextStyle(
+                                color: Colors.grey[700],
+                              ),
+                              textAlign: TextAlign.justify,
+                            ),
+                            onTap: () {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => ForgotPassword()));
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20,),
+                    GestureDetector(
+                      child: circularPro
+                          ? const Center(
+                        child: CircularProgressIndicator(
+                          color: Colors.black54,
+                        ),
+                      )
+                          : Container(
+                        margin:
+                        const EdgeInsets.symmetric(horizontal: 25),
+                        padding: const EdgeInsets.all(25),
+                        decoration: BoxDecoration(
+                          color: Colors.black,
+                          borderRadius: BorderRadius.circular(12),
+                        ),
+                        child: const Center(
+                          // child: isDone? const CircularProgressIndicator(color: Color(0xffF1EEEEFF),strokeWidth: 3,
+                          // ):
+                          child: Text(
+                            "Sign In",
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18),
+                          ),
+                        ),
+                      ),
+                      onTap: () async {
+                        if (circularPro) return;
+                        setState(() => circularPro = true);
+                        await Future.delayed(const Duration(seconds: 2));
+                        setState(() {
+                          circularPro = false;
+                        });
+
+                        if (_formKey.currentState!.validate()) {
+                          _formKey.currentState!.save();
+
+                          User? user = FirebaseAuth.instance.currentUser;
+
+                          try {
+                            UserCredential userCredential = await FirebaseAuth
+                                .instance
+                                .signInWithEmailAndPassword(
+                                email: emailCont.text.trim(),
+                                password: passCont.text);
+                            Timer(const Duration(milliseconds: 0), () {
+                              CircularProgressIndicator(
+                                color: Colors.grey.shade200,
+                              );
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  duration: Duration(milliseconds: 1200),
+                                  content: Text(
+                                    "Successfully Logged In",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.green,
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
+                                  )));
+                              Navigator.push(context, Transition(child: const Dashboard(),transitionEffect: TransitionEffect.SCALE));
+                            });
+                          } on FirebaseAuthException catch (e) {
+                            if (e.code == 'user-not-found') {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  duration: Duration(milliseconds: 2000),
+                                  content: Text(
+                                    "No user found for that email",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
+                                  )));
+
+                              print('No user found for that email.');
+                            } else if (e.code == 'wrong-password') {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    "Wrong password provided for the user",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
+                                  )));
+
+                              print('Wrong password provided for that user.');
+                            } else if (!(user != null && user!.emailVerified)) {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  duration: Duration(milliseconds: 2000),
+                                  content: Text(
+                                    "Email Not Verified yet.Please verify it",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
+                                  )));
+                            } else if (e.code ==
+                                "The email address is badly formatted") {
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    "Invalid Email (The email address is badly formatted)",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
+                                  )));
+                            }
+                            else if (!user.emailVerified){
+                              ScaffoldMessenger.of(context)
+                                  .showSnackBar(const SnackBar(
+                                  backgroundColor: Colors.white,
+                                  content: Text(
+                                    "Verify Your E-mail First",
+                                    style: TextStyle(
+                                        fontSize: 15,
+                                        color: Colors.red,
+                                        fontWeight: FontWeight.w400),
+                                    textAlign: TextAlign.center,
+                                  )));
+                            }
+                          }
+                        }
+                      },
+                    ),
+                    const SizedBox(height: 30,),
+                  ],
+                )
+              )
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
+/*
+return Scaffold(
       body: Form(
         key: _formKey,
         child: SafeArea(
@@ -432,8 +787,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                       fontWeight: FontWeight.w400),
                                   textAlign: TextAlign.center,
                                 )));
-                            Navigator.push(context, PageTransition(child: const Dashboard(), type: PageTransitionType.size,
-                            duration: const Duration(milliseconds: 300)));
+                            Navigator.push(context, Transition(child: const Dashboard(),transitionEffect: TransitionEffect.SCALE));
                           });
                         } on FirebaseAuthException catch (e) {
                           if (e.code == 'user-not-found') {
@@ -607,5 +961,4 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
         ),
       ),
     );
-  }
-}
+ */

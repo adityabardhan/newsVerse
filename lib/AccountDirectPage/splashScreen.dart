@@ -167,7 +167,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
             ),
             const SizedBox(height: 15,),
             // Privacy policy area
-            const Text("Smart Design & Technique for Smart People",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
+            const Text("This app will build the future and will change people’s lives",style: TextStyle(color: Colors.black,fontWeight: FontWeight.w500),),
             // White space
             const SizedBox(
               height: 30,

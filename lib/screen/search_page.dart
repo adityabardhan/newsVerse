@@ -19,10 +19,7 @@ class DiscoveryPage extends StatefulWidget {
   State<DiscoveryPage> createState() => _DiscoveryPageState();
 }
 
-class _DiscoveryPageState extends State<DiscoveryPage> with AutomaticKeepAliveClientMixin<DiscoveryPage> {
-
-  @override
-  bool get wantKeepAlive => true;
+class _DiscoveryPageState extends State<DiscoveryPage> {
   final itemBuild = [
     'International',
     'Business',
@@ -244,681 +241,633 @@ class _DiscoveryPageState extends State<DiscoveryPage> with AutomaticKeepAliveCl
     return WillPopScope(
         onWillPop:exitOverride,
         child: SizedBox.expand(
-          child: GestureDetector(
-            // onPanUpdate: (details) {
-            //   if(details.delta.dx == null) {
-            //     return;
-            //   } else if (details.delta.dx > 0) {
-            //     Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //             builder: (context) => HomeScreen(category: 'all')));
-            //   } else if (details.delta.dx < 0) {
-            //     Navigator.push(context,
-            //         MaterialPageRoute(builder: (context) => AccountPage()));
-            //   }
-            // },
-            // onHorizontalDragEnd: (DragEndDetails details){
-            //   if (details.primaryVelocity! < 0 ){
-            //     Navigator.push(context,
-            //         MaterialPageRoute(builder: (context) => AccountPage()));
-            //   }
-            //   else if (details.primaryVelocity! > 0){
-            //     Navigator.push(
-            //         context,
-            //         MaterialPageRoute(
-            //             builder: (context) => HomeScreen(category: 'all')));
-            //   }
-            //   else {
-            //     return;
-            //   }
-            // },
-            child: Scaffold(
+          child: Scaffold(
+            backgroundColor: isLightTheme
+                ? Colors.grey.withOpacity(0.1)
+                : Colors.grey.shade800.withOpacity(0.4),
+            appBar: AppBar(
+              elevation: 0,
+              automaticallyImplyLeading: false,
               backgroundColor: isLightTheme
-                  ? Colors.grey.withOpacity(0.1)
-                  : Colors.grey.shade800.withOpacity(0.4),
-              // appBar: AppBar(
-              //   elevation: 0,
-              //   automaticallyImplyLeading: false,
-              //   backgroundColor: isLightTheme
-              //       ? Colors.white.withOpacity(0.04)
-              //       : Colors.grey.withOpacity(0.04),
-              //   flexibleSpace: Container(
-              //     margin: const EdgeInsets.only(
-              //         top: 35, left: 30, right: 30, bottom: 0),
-              //     // padding: ,
-              //     decoration: BoxDecoration(
-              //         borderRadius: BorderRadius.circular(15),
-              //         color: Colors.white),
-              //     child: TextFormField(
-              //       style: TextStyle(color: Colors.black.withOpacity(0.8)),
-              //       cursorColor: Colors.grey.withOpacity(0.08),
-              //       onChanged: (value) {
-              //         if (mounted) {
-              //           setState(() {
-              //             searchSave = value!;
-              //           });
-              //         }
-              //       },
-              //       onTap: () {
-              //         if (mounted) {
-              //           setState(() {
-              //             textItem.clear();
-              //           });
-              //         }
-              //       },
-              //       onSaved: (value) {
-              //         if (mounted) {
-              //           setState(() {
-              //             searchSave = value!;
-              //           });
-              //         }
-              //       },
-              //       // cursorColor: Colors.black38,
-              //       controller: searchController,
-              //       textInputAction: TextInputAction.search,
-              //       autocorrect: true,
-              //       onFieldSubmitted: (value) {
-              //         if (mounted) {
-              //           setState(() {
-              //             if (value!.isEmpty) {
-              //               return;
-              //             } else {
-              //               searchSave = value!;
-              //               Navigator.push(
-              //                   context,
-              //                   MaterialPageRoute(
-              //                       builder: (context) => CategoriesPage(
-              //                             query: value,
-              //                           )));
-              //             }
-              //           });
-              //         }
-              //       },
-              //       decoration: InputDecoration(
-              //           border: OutlineInputBorder(
-              //             borderRadius: BorderRadius.circular(15),
-              //           ),
-              //           enabledBorder: OutlineInputBorder(
-              //               borderRadius: BorderRadius.circular(15),
-              //               borderSide: BorderSide(
-              //                 color: Colors.white.withOpacity(0.5),
-              //               )),
-              //           focusedBorder: OutlineInputBorder(
-              //               borderRadius: BorderRadius.circular(15),
-              //               borderSide: BorderSide(
-              //                 color: Colors.white.withOpacity(0.6),
-              //               )),
-              //           suffixIcon: IconButton(
-              //             icon: Icon(
-              //               Icons.search_rounded,
-              //               size: 24,
-              //               color: Colors.black.withOpacity(0.6),
-              //             ),
-              //             onPressed: () {
-              //               if (searchSave.isNotEmpty && mounted) {
-              //                 setState(() {
-              //                   Navigator.push(
-              //                       context,
-              //                       MaterialPageRoute(
-              //                           builder: (context) => CategoriesPage(
-              //                                 query: searchSave.trim(),
-              //                               )));
-              //                 });
-              //               }
-              //             },
-              //             splashColor: Colors.transparent,
-              //           ),
-              //           hintStyle:
-              //               TextStyle(color: Colors.black.withOpacity(0.8)),
-              //           hintText: "Search News"),
-              //     ),
-              //   ),
-              // ),
-              // bottomNavigationBar: const BottomNavBar("search"),
-              body:  Column(
-                  children: [
-                    Container(
-                      margin: const EdgeInsets.only(
-                          top: 40, left: 30, right: 30, bottom: 0),
-                      // padding: ,
-                      decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(15),
-                          color: Colors.white),
-                      child: TextFormField(
-                        style: TextStyle(color: Colors.black.withOpacity(0.8)),
-                        cursorColor: Colors.grey.withOpacity(0.08),
-                        onChanged: (value) {
-                          if (mounted) {
-                            setState(() {
-                              searchSave = value!;
-                            });
-                          }
-                        },
-                        onTap: () {
-                          if (mounted) {
-                            setState(() {
-                              textItem.clear();
-                            });
-                          }
-                        },
-                        onSaved: (value) {
-                          if (mounted) {
-                            setState(() {
-                              searchSave = value!;
-                            });
-                          }
-                        },
-                        // cursorColor: Colors.black38,
-                        controller: searchController,
-                        textInputAction: TextInputAction.search,
-                        autocorrect: true,
-                        onFieldSubmitted: (value) {
-                          if (mounted) {
-                            setState(() {
-                              if (value!.isEmpty) {
-                                return;
-                              } else {
-                                searchSave = value!;
-                                Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) => CategoriesPage(
-                                          query: value,
-                                        )));
-                              }
-                            });
-                          }
-                        },
-                        decoration: InputDecoration(
-                            border: OutlineInputBorder(
-                              borderRadius: BorderRadius.circular(15),
-                              borderSide: BorderSide(color: Colors.grey.shade300)
-                            ),
-                            enabledBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(color: Colors.grey.shade300)),
-                            focusedBorder: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                borderSide: BorderSide(color: Colors.grey.shade300)),
-                            suffixIcon: IconButton(
-                              icon: Icon(
-                                Icons.search_rounded,
-                                size: 24,
-                                color: Colors.black.withOpacity(0.6),
-                              ),
-                              onPressed: () {
-                                if (searchSave.isNotEmpty && mounted) {
-                                  setState(() {
-                                    Navigator.push(
-                                        context,
-                                        MaterialPageRoute(
-                                            builder: (context) => CategoriesPage(
-                                              query: searchSave.trim(),
-                                            )));
-                                  });
-                                }
-                              },
-                              splashColor: Colors.transparent,
-                            ),
-                            hintStyle:
-                            TextStyle(color: Colors.black.withOpacity(0.8)),
-                            hintText: "Search News"),
+                  ? Colors.white.withOpacity(0.04)
+                  : Colors.grey.withOpacity(0.04),
+              flexibleSpace: Container(
+                padding: const EdgeInsets.only(top: 5),
+                margin: const EdgeInsets.only(
+                    top: 40, left: 30, right: 30, bottom: 5),
+                // padding: ,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(15),
+                    color: Colors.white),
+                child: TextFormField(
+                  style: TextStyle(color: Colors.black.withOpacity(0.8)),
+                  cursorColor: Colors.grey.withOpacity(0.08),
+                  onChanged: (value) {
+                    if (mounted) {
+                      setState(() {
+                        searchSave = value!;
+                      });
+                    }
+                  },
+                  onTap: () {
+                    if (mounted) {
+                      setState(() {
+                        textItem.clear();
+                      });
+                    }
+                  },
+                  onSaved: (value) {
+                    if (mounted) {
+                      setState(() {
+                        searchSave = value!;
+                      });
+                    }
+                  },
+                  // cursorColor: Colors.black38,
+                  controller: searchController,
+                  textInputAction: TextInputAction.search,
+                  autocorrect: true,
+                  onFieldSubmitted: (value) {
+                    if (mounted) {
+                      setState(() {
+                        if (value!.isEmpty) {
+                          return;
+                        } else {
+                          searchSave = value!;
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => CategoriesPage(
+                                        query: value,
+                                      )));
+                        }
+                      });
+                    }
+                  },
+                  decoration: InputDecoration(
+                      border: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(15),
                       ),
-                    ),
-                    Expanded(
-                      child: Container(
-                        margin: const EdgeInsets.only(
-                            bottom: 0, left: 12, right: 12,top: 18),
-                        child: GridView.builder(
-                            scrollDirection: Axis.vertical,
-                              keyboardDismissBehavior:
-                                  ScrollViewKeyboardDismissBehavior.onDrag,
-                              physics: const AlwaysScrollableScrollPhysics(),
-                              itemCount: itemBuild.length,
-                              shrinkWrap: true,
-                              gridDelegate:
-                                  const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      childAspectRatio: 8 / 8.2,
-                                      crossAxisSpacing: 15,
-                                      mainAxisSpacing: 15),
-                              itemBuilder: (BuildContext context, int index) {
-                                try {
-                                  return Card(
-                                      elevation: 2.5,
-                                      semanticContainer: true,
-                                      shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(15),
-                                      ),
-                                      child:
-                                      // index == 0
-                                      //     ? GestureDetector(
-                                      //         onTap: () {
-                                      //           Navigator.push(
-                                      //               context,
-                                      //               MaterialPageRoute(
-                                      //                   builder: (context) =>
-                                      //                       CategoricalNews(
-                                      //                           category:
-                                      //                               'india')));
-                                      //         },
-                                      //         child: Container(
-                                      //           decoration: BoxDecoration(
-                                      //             borderRadius:
-                                      //                 BorderRadius.circular(10),
-                                      //             image: const DecorationImage(
-                                      //                 image: AssetImage(
-                                      //                   'assets/images/lion.png',
-                                      //                 ),
-                                      //                 fit: BoxFit.contain,
-                                      //                 filterQuality:
-                                      //                     FilterQuality.high),
-                                      //           ),
-                                      //           child: Container(
-                                      //               alignment:
-                                      //                   Alignment.bottomCenter,
-                                      //               child: Padding(
-                                      //                 padding:
-                                      //                     const EdgeInsets.only(
-                                      //                         bottom: 3),
-                                      //                 child: Text(
-                                      //                   itemBuild[index],
-                                      //                   style: const TextStyle(
-                                      //                     fontSize: 15,
-                                      //                     fontFamily:
-                                      //                         "CourierPrime",
-                                      //                     fontWeight:
-                                      //                         FontWeight.w600,
-                                      //                   ),
-                                      //                 ),
-                                      //               )),
-                                      //         ))
-                                      //     :
-                                          index == 0
-                                              ? GestureDetector(
-                                                  onTap: () {
-                                                    Navigator.push(
-                                                        context,
-                                                        MaterialPageRoute(
-                                                            builder: (context) =>
-                                                                CategoricalNews(
-                                                                    category:
-                                                                        'world')));
-                                                  },
+                      enabledBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: Colors.white.withOpacity(0.5),
+                          )),
+                      focusedBorder: OutlineInputBorder(
+                          borderRadius: BorderRadius.circular(15),
+                          borderSide: BorderSide(
+                            color: Colors.white.withOpacity(0.6),
+                          )),
+                      suffixIcon: IconButton(
+                        icon: Icon(
+                          Icons.search_rounded,
+                          size: 24,
+                          color: Colors.black.withOpacity(0.6),
+                        ),
+                        onPressed: () {
+                          if (searchSave.isNotEmpty && mounted) {
+                            setState(() {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) => CategoriesPage(
+                                            query: searchSave.trim(),
+                                          )));
+                            });
+                          }
+                        },
+                        splashColor: Colors.transparent,
+                      ),
+                      hintStyle:
+                          TextStyle(color: Colors.black.withOpacity(0.8)),
+                      hintText: "Search News"
+                  ),
+                ),
+              ),
+            ),
+            // bottomNavigationBar: const BottomNavBar("search"),
+            body:  Column(
+                children: [
+                  // Container(
+                  //   margin: const EdgeInsets.only(
+                  //       top: 40, left: 30, right: 30, bottom: 0),
+                  //   // padding: ,
+                  //   decoration: BoxDecoration(
+                  //       borderRadius: BorderRadius.circular(15),
+                  //       color: Colors.white),
+                  //   child: TextFormField(
+                  //     style: TextStyle(color: Colors.black.withOpacity(0.8)),
+                  //     cursorColor: Colors.grey.withOpacity(0.08),
+                  //     onChanged: (value) {
+                  //       if (mounted) {
+                  //         setState(() {
+                  //           searchSave = value!;
+                  //         });
+                  //       }
+                  //     },
+                  //     onTap: () {
+                  //       if (mounted) {
+                  //         setState(() {
+                  //           textItem.clear();
+                  //         });
+                  //       }
+                  //     },
+                  //     onSaved: (value) {
+                  //       if (mounted) {
+                  //         setState(() {
+                  //           searchSave = value!;
+                  //         });
+                  //       }
+                  //     },
+                  //     // cursorColor: Colors.black38,
+                  //     controller: searchController,
+                  //     textInputAction: TextInputAction.search,
+                  //     autocorrect: true,
+                  //     onFieldSubmitted: (value) {
+                  //       if (mounted) {
+                  //         setState(() {
+                  //           if (value!.isEmpty) {
+                  //             return;
+                  //           } else {
+                  //             searchSave = value!;
+                  //             Navigator.push(
+                  //                 context,
+                  //                 MaterialPageRoute(
+                  //                     builder: (context) => CategoriesPage(
+                  //                       query: value,
+                  //                     )));
+                  //           }
+                  //         });
+                  //       }
+                  //     },
+                  //     decoration: InputDecoration(
+                  //         border: OutlineInputBorder(
+                  //           borderRadius: BorderRadius.circular(15),
+                  //           borderSide: BorderSide(color: Colors.grey.shade300)
+                  //         ),
+                  //         enabledBorder: OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(15),
+                  //             borderSide: BorderSide(color: Colors.grey.shade300)),
+                  //         focusedBorder: OutlineInputBorder(
+                  //             borderRadius: BorderRadius.circular(15),
+                  //             borderSide: BorderSide(color: Colors.grey.shade300)),
+                  //         suffixIcon: IconButton(
+                  //           icon: Icon(
+                  //             Icons.search_rounded,
+                  //             size: 24,
+                  //             color: Colors.black.withOpacity(0.6),
+                  //           ),
+                  //           onPressed: () {
+                  //             if (searchSave.isNotEmpty && mounted) {
+                  //               setState(() {
+                  //                 Navigator.push(
+                  //                     context,
+                  //                     MaterialPageRoute(
+                  //                         builder: (context) => CategoriesPage(
+                  //                           query: searchSave.trim(),
+                  //                         )));
+                  //               });
+                  //             }
+                  //           },
+                  //           splashColor: Colors.transparent,
+                  //         ),
+                  //         hintStyle:
+                  //         TextStyle(color: Colors.black.withOpacity(0.8)),
+                  //         hintText: "Search News"),
+                  //   ),
+                  // ),
+                  Expanded(
+                    child: Container(
+                      margin: const EdgeInsets.only(
+                          bottom: 17, left: 12, right: 12,top: 20),
+                      child: GridView.builder(
+                          scrollDirection: Axis.vertical,
+                            keyboardDismissBehavior:
+                                ScrollViewKeyboardDismissBehavior.onDrag,
+                            physics: const AlwaysScrollableScrollPhysics(),
+                            itemCount: itemBuild.length,
+                            shrinkWrap: true,
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount: 2,
+                                    childAspectRatio: 8 / 8.2,
+                                    crossAxisSpacing: 15,
+                                    mainAxisSpacing: 15),
+                            itemBuilder: (BuildContext context, int index) {
+                              try {
+                                return Card(
+                                    elevation: 2.5,
+                                    semanticContainer: true,
+                                    shape: RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(15),
+                                    ),
+                                    child:
+                                    // index == 0
+                                    //     ? GestureDetector(
+                                    //         onTap: () {
+                                    //           Navigator.push(
+                                    //               context,
+                                    //               MaterialPageRoute(
+                                    //                   builder: (context) =>
+                                    //                       CategoricalNews(
+                                    //                           category:
+                                    //                               'india')));
+                                    //         },
+                                    //         child: Container(
+                                    //           decoration: BoxDecoration(
+                                    //             borderRadius:
+                                    //                 BorderRadius.circular(10),
+                                    //             image: const DecorationImage(
+                                    //                 image: AssetImage(
+                                    //                   'assets/images/lion.png',
+                                    //                 ),
+                                    //                 fit: BoxFit.contain,
+                                    //                 filterQuality:
+                                    //                     FilterQuality.high),
+                                    //           ),
+                                    //           child: Container(
+                                    //               alignment:
+                                    //                   Alignment.bottomCenter,
+                                    //               child: Padding(
+                                    //                 padding:
+                                    //                     const EdgeInsets.only(
+                                    //                         bottom: 3),
+                                    //                 child: Text(
+                                    //                   itemBuild[index],
+                                    //                   style: const TextStyle(
+                                    //                     fontSize: 15,
+                                    //                     fontFamily:
+                                    //                         "CourierPrime",
+                                    //                     fontWeight:
+                                    //                         FontWeight.w600,
+                                    //                   ),
+                                    //                 ),
+                                    //               )),
+                                    //         ))
+                                    //     :
+                                        index == 0
+                                            ? GestureDetector(
+                                                onTap: () {
+                                                  Navigator.push(
+                                                      context,
+                                                      MaterialPageRoute(
+                                                          builder: (context) =>
+                                                              CategoricalNews(
+                                                                  category:
+                                                                      'world')));
+                                                },
+                                                child: Container(
+                                                  decoration: BoxDecoration(
+                                                    borderRadius:
+                                                        BorderRadius.circular(10),
+                                                    image: const DecorationImage(
+                                                        image: AssetImage(
+                                                            "assets/images/worldGloble.png"),
+                                                        fit: BoxFit.contain),
+                                                  ),
                                                   child: Container(
-                                                    decoration: BoxDecoration(
-                                                      borderRadius:
-                                                          BorderRadius.circular(10),
-                                                      image: const DecorationImage(
-                                                          image: AssetImage(
-                                                              "assets/images/worldGloble.png"),
-                                                          fit: BoxFit.contain),
-                                                    ),
-                                                    child: Container(
-                                                        alignment:
-                                                            Alignment.bottomCenter,
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsets.only(
-                                                                  bottom: 1.8),
-                                                          child: Text(
-                                                            itemBuild[index],
-                                                            style: const TextStyle(
-                                                              fontSize: 15,
-                                                              fontFamily:
-                                                                  "CourierPrime",
-                                                              fontWeight:
-                                                                  FontWeight.w600,
-                                                            ),
+                                                      alignment:
+                                                          Alignment.bottomCenter,
+                                                      child: Padding(
+                                                        padding:
+                                                            const EdgeInsets.only(
+                                                                bottom: 1.8),
+                                                        child: Text(
+                                                          itemBuild[index],
+                                                          style: const TextStyle(
+                                                            fontSize: 15,
+                                                            fontFamily:
+                                                                "CourierPrime",
+                                                            fontWeight:
+                                                                FontWeight.w600,
                                                           ),
-                                                        )),
-                                                  ))
-                                              :
-                                      index == 1
-                                                  // ? GestureDetector(
-                                                  // onTap: () {
-                                                  //   Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoricalNews(category: 'india')));
-                                                  // },
-                                                  // child: Container(
-                                                  //   decoration: BoxDecoration(
-                                                  //     borderRadius:
-                                                  //     BorderRadius.circular(10),
-                                                  //     image: const DecorationImage(
-                                                  //         image: AssetImage(
-                                                  //             'assets/images/doctor.jpg'),
-                                                  //         fit: BoxFit.cover),
-                                                  //   ),
-                                                  //   child: Container(
-                                                  //       alignment:
-                                                  //       Alignment.bottomCenter,
-                                                  //       child: Padding(
-                                                  //         padding:
-                                                  //         const EdgeInsets.only(
-                                                  //             bottom: 1),
-                                                  //         child: Text(
-                                                  //           itemBuild[index],
-                                                  //           style: const TextStyle(
-                                                  //             fontSize: 15,
-                                                  //             fontFamily:
-                                                  //             "CourierPrime",
-                                                  //             fontWeight:
-                                                  //             FontWeight.w600,
-                                                  //           ),
-                                                  //         ),
-                                                  //       )),
-                                                  // ))
-                                                  // : index == 3
-                                                  ? GestureDetector(
-                                                      onTap: () {
-                                                        Navigator.push(
-                                                            context,
-                                                            MaterialPageRoute(
-                                                                builder: (context) =>
-                                                                    CategoricalNews(
-                                                                        category:
-                                                                            'business')));
-                                                      },
-                                                      child: Container(
-                                                        decoration: BoxDecoration(
-                                                          borderRadius:
-                                                              BorderRadius.circular(
-                                                                  10),
-                                                          image: const DecorationImage(
-                                                              image: AssetImage(
-                                                                  'assets/images/business.png'),
-                                                              fit: BoxFit.cover),
                                                         ),
-                                                        child: Container(
-                                                            alignment: Alignment
-                                                                .bottomCenter,
-                                                            child: Padding(
-                                                              padding:
-                                                                  const EdgeInsets
-                                                                          .only(
-                                                                      bottom: 3),
-                                                              child: Text(
-                                                                itemBuild[index],
-                                                                style:
-                                                                    const TextStyle(
-                                                                  fontSize: 15,
-                                                                  fontFamily:
-                                                                      "CourierPrime",
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .w600,
-                                                                ),
+                                                      )),
+                                                ))
+                                            :
+                                    index == 1
+                                                // ? GestureDetector(
+                                                // onTap: () {
+                                                //   Navigator.push(context, MaterialPageRoute(builder: (context)=> CategoricalNews(category: 'india')));
+                                                // },
+                                                // child: Container(
+                                                //   decoration: BoxDecoration(
+                                                //     borderRadius:
+                                                //     BorderRadius.circular(10),
+                                                //     image: const DecorationImage(
+                                                //         image: AssetImage(
+                                                //             'assets/images/doctor.jpg'),
+                                                //         fit: BoxFit.cover),
+                                                //   ),
+                                                //   child: Container(
+                                                //       alignment:
+                                                //       Alignment.bottomCenter,
+                                                //       child: Padding(
+                                                //         padding:
+                                                //         const EdgeInsets.only(
+                                                //             bottom: 1),
+                                                //         child: Text(
+                                                //           itemBuild[index],
+                                                //           style: const TextStyle(
+                                                //             fontSize: 15,
+                                                //             fontFamily:
+                                                //             "CourierPrime",
+                                                //             fontWeight:
+                                                //             FontWeight.w600,
+                                                //           ),
+                                                //         ),
+                                                //       )),
+                                                // ))
+                                                // : index == 3
+                                                ? GestureDetector(
+                                                    onTap: () {
+                                                      Navigator.push(
+                                                          context,
+                                                          MaterialPageRoute(
+                                                              builder: (context) =>
+                                                                  CategoricalNews(
+                                                                      category:
+                                                                          'business')));
+                                                    },
+                                                    child: Container(
+                                                      decoration: BoxDecoration(
+                                                        borderRadius:
+                                                            BorderRadius.circular(
+                                                                10),
+                                                        image: const DecorationImage(
+                                                            image: AssetImage(
+                                                                'assets/images/business.png'),
+                                                            fit: BoxFit.cover),
+                                                      ),
+                                                      child: Container(
+                                                          alignment: Alignment
+                                                              .bottomCenter,
+                                                          child: Padding(
+                                                            padding:
+                                                                const EdgeInsets
+                                                                        .only(
+                                                                    bottom: 3),
+                                                            child: Text(
+                                                              itemBuild[index],
+                                                              style:
+                                                                  const TextStyle(
+                                                                fontSize: 15,
+                                                                fontFamily:
+                                                                    "CourierPrime",
+                                                                fontWeight:
+                                                                    FontWeight
+                                                                        .w600,
                                                               ),
-                                                            )),
-                                                      ))
-                                                  : index == 2
-                                                      ? GestureDetector(
-                                                          onTap: () {
-                                                            Navigator.push(
-                                                                context,
-                                                                MaterialPageRoute(
-                                                                    builder: (context) =>
-                                                                        CategoricalNews(
-                                                                            category:
-                                                                                'health')));
-                                                          },
-                                                          child: Container(
-                                                            decoration:
-                                                                BoxDecoration(
-                                                              borderRadius:
-                                                                  BorderRadius
-                                                                      .circular(10),
-                                                              image: const DecorationImage(
-                                                                  image: AssetImage(
-                                                                      'assets/images/sciencee.png'),
-                                                                  fit:
-                                                                      BoxFit.cover),
                                                             ),
-                                                            child: Container(
-                                                                alignment: Alignment
-                                                                    .bottomCenter,
-                                                                child: Padding(
-                                                                  padding:
-                                                                      const EdgeInsets
-                                                                              .only(
-                                                                          bottom:
-                                                                              2.5),
-                                                                  child: Text(
-                                                                    itemBuild[
-                                                                        index],
-                                                                    style:
-                                                                        const TextStyle(
-                                                                      fontSize: 15,
-                                                                      fontFamily:
-                                                                          "CourierPrime",
-                                                                      fontWeight:
-                                                                          FontWeight
-                                                                              .w600,
-                                                                    ),
+                                                          )),
+                                                    ))
+                                                : index == 2
+                                                    ? GestureDetector(
+                                                        onTap: () {
+                                                          Navigator.push(
+                                                              context,
+                                                              MaterialPageRoute(
+                                                                  builder: (context) =>
+                                                                      CategoricalNews(
+                                                                          category:
+                                                                              'health')));
+                                                        },
+                                                        child: Container(
+                                                          decoration:
+                                                              BoxDecoration(
+                                                            borderRadius:
+                                                                BorderRadius
+                                                                    .circular(10),
+                                                            image: const DecorationImage(
+                                                                image: AssetImage(
+                                                                    'assets/images/sciencee.png'),
+                                                                fit:
+                                                                    BoxFit.cover),
+                                                          ),
+                                                          child: Container(
+                                                              alignment: Alignment
+                                                                  .bottomCenter,
+                                                              child: Padding(
+                                                                padding:
+                                                                    const EdgeInsets
+                                                                            .only(
+                                                                        bottom:
+                                                                            2.5),
+                                                                child: Text(
+                                                                  itemBuild[
+                                                                      index],
+                                                                  style:
+                                                                      const TextStyle(
+                                                                    fontSize: 15,
+                                                                    fontFamily:
+                                                                        "CourierPrime",
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .w600,
                                                                   ),
-                                                                )),
-                                                          ))
-                                                      : index == 3
-                                                          ? GestureDetector(
-                                                              onTap: () {
-                                                                Navigator.push(
-                                                                    context,
-                                                                    MaterialPageRoute(
-                                                                        builder: (context) =>
-                                                                            CategoricalNews(
-                                                                                category:
-                                                                                    'entertainment')));
-                                                              },
+                                                                ),
+                                                              )),
+                                                        ))
+                                                    : index == 3
+                                                        ? GestureDetector(
+                                                            onTap: () {
+                                                              Navigator.push(
+                                                                  context,
+                                                                  MaterialPageRoute(
+                                                                      builder: (context) =>
+                                                                          CategoricalNews(
+                                                                              category:
+                                                                                  'entertainment')));
+                                                            },
+                                                            child: Container(
+                                                              decoration: BoxDecoration(
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(
+                                                                          10),
+                                                                  image: const DecorationImage(
+                                                                      image: AssetImage(
+                                                                          'assets/images/online.png'),
+                                                                      fit: BoxFit
+                                                                          .contain,
+                                                                      filterQuality:
+                                                                          FilterQuality
+                                                                              .high)),
                                                               child: Container(
-                                                                decoration: BoxDecoration(
+                                                                  alignment: Alignment
+                                                                      .bottomCenter,
+                                                                  child: Padding(
+                                                                    padding: const EdgeInsets
+                                                                            .only(
+                                                                        bottom:
+                                                                            2),
+                                                                    child: Text(
+                                                                      itemBuild[
+                                                                          index],
+                                                                      style:
+                                                                          const TextStyle(
+                                                                        fontSize:
+                                                                            15,
+                                                                        fontFamily:
+                                                                            "CourierPrime",
+                                                                        fontWeight:
+                                                                            FontWeight
+                                                                                .w600,
+                                                                      ),
+                                                                    ),
+                                                                  )),
+                                                            ))
+                                                        : index == 4
+                                                            ? GestureDetector(
+                                                                onTap: () {
+                                                                  Navigator.push(
+                                                                      context,
+                                                                      MaterialPageRoute(
+                                                                          builder:
+                                                                              (context) =>
+                                                                                  CategoricalNews(category: 'technology')));
+                                                                },
+                                                                child: Container(
+                                                                  decoration:
+                                                                      BoxDecoration(
                                                                     borderRadius:
-                                                                        BorderRadius.circular(
-                                                                            10),
+                                                                        BorderRadius
+                                                                            .circular(
+                                                                                10),
                                                                     image: const DecorationImage(
                                                                         image: AssetImage(
-                                                                            'assets/images/online.png'),
+                                                                            'assets/images/tech.png'),
                                                                         fit: BoxFit
-                                                                            .contain,
-                                                                        filterQuality:
-                                                                            FilterQuality
-                                                                                .high)),
-                                                                child: Container(
-                                                                    alignment: Alignment
-                                                                        .bottomCenter,
-                                                                    child: Padding(
-                                                                      padding: const EdgeInsets
-                                                                              .only(
-                                                                          bottom:
-                                                                              2),
-                                                                      child: Text(
-                                                                        itemBuild[
-                                                                            index],
-                                                                        style:
-                                                                            const TextStyle(
-                                                                          fontSize:
-                                                                              15,
-                                                                          fontFamily:
-                                                                              "CourierPrime",
-                                                                          fontWeight:
-                                                                              FontWeight
-                                                                                  .w600,
-                                                                        ),
-                                                                      ),
-                                                                    )),
-                                                              ))
-                                                          : index == 4
-                                                              ? GestureDetector(
-                                                                  onTap: () {
-                                                                    Navigator.push(
-                                                                        context,
-                                                                        MaterialPageRoute(
-                                                                            builder:
-                                                                                (context) =>
-                                                                                    CategoricalNews(category: 'technology')));
-                                                                  },
-                                                                  child: Container(
-                                                                    decoration:
-                                                                        BoxDecoration(
-                                                                      borderRadius:
-                                                                          BorderRadius
-                                                                              .circular(
-                                                                                  10),
-                                                                      image: const DecorationImage(
-                                                                          image: AssetImage(
-                                                                              'assets/images/tech.png'),
-                                                                          fit: BoxFit
-                                                                              .cover),
-                                                                    ),
+                                                                            .cover),
+                                                                  ),
+                                                                  child:
+                                                                      Container(
+                                                                          alignment:
+                                                                              Alignment
+                                                                                  .bottomCenter,
+                                                                          child:
+                                                                              Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.only(bottom: 3),
+                                                                            child:
+                                                                                Text(
+                                                                              itemBuild[index],
+                                                                              style:
+                                                                                  const TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontFamily: "CourierPrime",
+                                                                                fontWeight: FontWeight.w600,
+                                                                              ),
+                                                                            ),
+                                                                          )),
+                                                                ))
+                                                            : index == 5
+                                                                ? GestureDetector(
+                                                                    onTap: () {
+                                                                      Navigator.push(
+                                                                          context,
+                                                                          MaterialPageRoute(
+                                                                              builder: (context) =>
+                                                                                  CategoricalNews(category: 'sports')));
+                                                                    },
                                                                     child:
                                                                         Container(
-                                                                            alignment:
-                                                                                Alignment
-                                                                                    .bottomCenter,
+                                                                      decoration:
+                                                                          BoxDecoration(
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                10),
+                                                                        image: const DecorationImage(
+                                                                            image: AssetImage(
+                                                                                'assets/images/sports.png'),
+                                                                            fit: BoxFit
+                                                                                .cover),
+                                                                      ),
+                                                                      child: Container(
+                                                                          alignment: Alignment.bottomCenter,
+                                                                          child: Padding(
+                                                                            padding:
+                                                                                const EdgeInsets.only(bottom: 2),
                                                                             child:
-                                                                                Padding(
-                                                                              padding:
-                                                                                  const EdgeInsets.only(bottom: 3),
-                                                                              child:
-                                                                                  Text(
-                                                                                itemBuild[index],
-                                                                                style:
-                                                                                    const TextStyle(
-                                                                                  fontSize: 15,
-                                                                                  fontFamily: "CourierPrime",
-                                                                                  fontWeight: FontWeight.w600,
-                                                                                ),
+                                                                                Text(
+                                                                              itemBuild[index],
+                                                                              style:
+                                                                                  const TextStyle(
+                                                                                fontSize: 15,
+                                                                                fontFamily: "CourierPrime",
+                                                                                fontWeight: FontWeight.w600,
                                                                               ),
-                                                                            )),
-                                                                  ))
-                                                              : index == 5
-                                                                  ? GestureDetector(
-                                                                      onTap: () {
-                                                                        Navigator.push(
-                                                                            context,
-                                                                            MaterialPageRoute(
-                                                                                builder: (context) =>
-                                                                                    CategoricalNews(category: 'sports')));
-                                                                      },
-                                                                      child:
-                                                                          Container(
-                                                                        decoration:
-                                                                            BoxDecoration(
-                                                                          borderRadius:
-                                                                              BorderRadius.circular(
-                                                                                  10),
-                                                                          image: const DecorationImage(
-                                                                              image: AssetImage(
-                                                                                  'assets/images/sports.png'),
-                                                                              fit: BoxFit
-                                                                                  .cover),
-                                                                        ),
-                                                                        child: Container(
-                                                                            alignment: Alignment.bottomCenter,
-                                                                            child: Padding(
-                                                                              padding:
-                                                                                  const EdgeInsets.only(bottom: 2),
-                                                                              child:
-                                                                                  Text(
-                                                                                itemBuild[index],
-                                                                                style:
-                                                                                    const TextStyle(
-                                                                                  fontSize: 15,
-                                                                                  fontFamily: "CourierPrime",
-                                                                                  fontWeight: FontWeight.w600,
-                                                                                ),
-                                                                              ),
-                                                                            )),
-                                                                      ))
-                                                                  : index == 6
-                                                                      ? GestureDetector(
-                                                                          onTap:
-                                                                              () {
-                                                                            Navigator.push(
-                                                                                context,
-                                                                                MaterialPageRoute(builder: (context) => CategoricalNews(category: 'science')));
-                                                                          },
-                                                                          child:
-                                                                              Container(
-                                                                            decoration:
-                                                                                BoxDecoration(
-                                                                              borderRadius:
-                                                                                  BorderRadius.circular(10),
-                                                                              image: const DecorationImage(
-                                                                                  image: AssetImage('assets/images/scs.png'),
-                                                                                  fit: BoxFit.contain),
                                                                             ),
-                                                                            child: Container(
-                                                                                alignment: Alignment.bottomCenter,
-                                                                                child: Padding(
-                                                                                  padding: const EdgeInsets.only(bottom: 3),
-                                                                                  child: Text(
-                                                                                    itemBuild[index],
-                                                                                    style: const TextStyle(
-                                                                                      fontSize: 15,
-                                                                                      fontFamily: "CourierPrime",
-                                                                                      fontWeight: FontWeight.w600,
-                                                                                    ),
+                                                                          )),
+                                                                    ))
+                                                                : index == 6
+                                                                    ? GestureDetector(
+                                                                        onTap:
+                                                                            () {
+                                                                          Navigator.push(
+                                                                              context,
+                                                                              MaterialPageRoute(builder: (context) => CategoricalNews(category: 'science')));
+                                                                        },
+                                                                        child:
+                                                                            Container(
+                                                                          decoration:
+                                                                              BoxDecoration(
+                                                                            borderRadius:
+                                                                                BorderRadius.circular(10),
+                                                                            image: const DecorationImage(
+                                                                                image: AssetImage('assets/images/scs.png'),
+                                                                                fit: BoxFit.contain),
+                                                                          ),
+                                                                          child: Container(
+                                                                              alignment: Alignment.bottomCenter,
+                                                                              child: Padding(
+                                                                                padding: const EdgeInsets.only(bottom: 3),
+                                                                                child: Text(
+                                                                                  itemBuild[index],
+                                                                                  style: const TextStyle(
+                                                                                    fontSize: 15,
+                                                                                    fontFamily: "CourierPrime",
+                                                                                    fontWeight: FontWeight.w600,
                                                                                   ),
-                                                                                )),
-                                                                          ))
-                                                                      // : index == 7
-                                                                      //     ? GestureDetector(
-                                                                      //         onTap:
-                                                                      //             () {
-                                                                      //           Navigator.push(context,
-                                                                      //               MaterialPageRoute(builder: (context) => CategoricalNews(category: 'automobile')));
-                                                                      //         },
-                                                                      //         child:
-                                                                      //             Container(
-                                                                      //           decoration:
-                                                                      //               BoxDecoration(
-                                                                      //             borderRadius: BorderRadius.circular(10),
-                                                                      //             image: const DecorationImage(image: AssetImage('assets/images/idea.png'), fit: BoxFit.cover),
-                                                                      //           ),
-                                                                      //           child: Container(
-                                                                      //               alignment: Alignment.bottomCenter,
-                                                                      //               child: Padding(
-                                                                      //                 padding: const EdgeInsets.only(bottom: 3),
-                                                                      //                 child: Text(
-                                                                      //                   itemBuild[index],
-                                                                      //                   style: const TextStyle(
-                                                                      //                     fontSize: 15,
-                                                                      //                     fontFamily: "CourierPrime",
-                                                                      //                     fontWeight: FontWeight.w600,
-                                                                      //                   ),
-                                                                      //                 ),
-                                                                      //               )),
-                                                                      //         ))
-                                                                          : index == 7
-                                                                              ? GestureDetector(
-                                                                                  onTap: () {
-                                                                                    Navigator.push(context, MaterialPageRoute(builder: (context) => CategoricalNews(category: 'general')));
-                                                                                  },
-                                                                                  child: Container(
-                                                                                    decoration: BoxDecoration(
-                                                                                      borderRadius: BorderRadius.circular(10),
-                                                                                      image: const DecorationImage(image: AssetImage('assets/images/ideas.png'), fit: BoxFit.fill),
-                                                                                    ),
-                                                                                    child: Container(
-                                                                                        alignment: Alignment.bottomCenter,
-                                                                                        child: Padding(
-                                                                                          padding: const EdgeInsets.only(bottom: 3),
-                                                                                          child: Text(
-                                                                                            itemBuild[index],
-                                                                                            style: const TextStyle(
-                                                                                              fontSize: 15,
-                                                                                              fontFamily: "CourierPrime",
-                                                                                              fontWeight: FontWeight.w600,
-                                                                                            ),
-                                                                                          ),
-                                                                                        )),
-                                                                                  ))
-                                                                              : Container(
+                                                                                ),
+                                                                              )),
+                                                                        ))
+                                                                    // : index == 7
+                                                                    //     ? GestureDetector(
+                                                                    //         onTap:
+                                                                    //             () {
+                                                                    //           Navigator.push(context,
+                                                                    //               MaterialPageRoute(builder: (context) => CategoricalNews(category: 'automobile')));
+                                                                    //         },
+                                                                    //         child:
+                                                                    //             Container(
+                                                                    //           decoration:
+                                                                    //               BoxDecoration(
+                                                                    //             borderRadius: BorderRadius.circular(10),
+                                                                    //             image: const DecorationImage(image: AssetImage('assets/images/idea.png'), fit: BoxFit.cover),
+                                                                    //           ),
+                                                                    //           child: Container(
+                                                                    //               alignment: Alignment.bottomCenter,
+                                                                    //               child: Padding(
+                                                                    //                 padding: const EdgeInsets.only(bottom: 3),
+                                                                    //                 child: Text(
+                                                                    //                   itemBuild[index],
+                                                                    //                   style: const TextStyle(
+                                                                    //                     fontSize: 15,
+                                                                    //                     fontFamily: "CourierPrime",
+                                                                    //                     fontWeight: FontWeight.w600,
+                                                                    //                   ),
+                                                                    //                 ),
+                                                                    //               )),
+                                                                    //         ))
+                                                                        : index == 7
+                                                                            ? GestureDetector(
+                                                                                onTap: () {
+                                                                                  Navigator.push(context, MaterialPageRoute(builder: (context) => CategoricalNews(category: 'general')));
+                                                                                },
+                                                                                child: Container(
                                                                                   decoration: BoxDecoration(
                                                                                     borderRadius: BorderRadius.circular(10),
-                                                                                    image: const DecorationImage(
-                                                                                      image: AssetImage('assets/images/business.png'),
-                                                                                    ),
+                                                                                    image: const DecorationImage(image: AssetImage('assets/images/ideas.png'), fit: BoxFit.fill),
                                                                                   ),
                                                                                   child: Container(
                                                                                       alignment: Alignment.bottomCenter,
@@ -929,41 +878,58 @@ class _DiscoveryPageState extends State<DiscoveryPage> with AutomaticKeepAliveCl
                                                                                           style: const TextStyle(
                                                                                             fontSize: 15,
                                                                                             fontFamily: "CourierPrime",
-                                                                                            fontWeight: FontWeight.w500,
+                                                                                            fontWeight: FontWeight.w600,
                                                                                           ),
                                                                                         ),
                                                                                       )),
-                                                                                ));
-                                } catch (e) {
-                                  print('429');
-                                  return const SizedBox.shrink();
-                                }
-                              }),
+                                                                                ))
+                                                                            : Container(
+                                                                                decoration: BoxDecoration(
+                                                                                  borderRadius: BorderRadius.circular(10),
+                                                                                  image: const DecorationImage(
+                                                                                    image: AssetImage('assets/images/business.png'),
+                                                                                  ),
+                                                                                ),
+                                                                                child: Container(
+                                                                                    alignment: Alignment.bottomCenter,
+                                                                                    child: Padding(
+                                                                                      padding: const EdgeInsets.only(bottom: 3),
+                                                                                      child: Text(
+                                                                                        itemBuild[index],
+                                                                                        style: const TextStyle(
+                                                                                          fontSize: 15,
+                                                                                          fontFamily: "CourierPrime",
+                                                                                          fontWeight: FontWeight.w500,
+                                                                                        ),
+                                                                                      ),
+                                                                                    )),
+                                                                              ));
+                              } catch (e) {
+                                print('429');
+                                return const SizedBox.shrink();
+                              }
+                            }),
 
-                      ),
                     ),
-                    const SizedBox(
-                      height: 25,
-                    ),
-                    // Container(
-                    //   child: GestureDetector(
-                    //     onTap: () async => _pullToRefresh(),
-                    //     child: Icon(
-                    //         Icons.refresh_outlined,
-                    //         color: Color(0xffffffff),
-                    //         size: 33.0
-                    //     ),
-                    //   ),
-                    //   padding: EdgeInsets.all(10.0),
-                    //   margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0.0),
-                    //   decoration: BoxDecoration(
-                    //     color: Colors.black38,
-                    //     borderRadius: BorderRadius.all(Radius.circular(100.0)),
-                    //   ),
-                    // )
-                  ],
-                ),
-            ),
+                  ),
+                  // Container(
+                  //   child: GestureDetector(
+                  //     onTap: () async => _pullToRefresh(),
+                  //     child: Icon(
+                  //         Icons.refresh_outlined,
+                  //         color: Color(0xffffffff),
+                  //         size: 33.0
+                  //     ),
+                  //   ),
+                  //   padding: EdgeInsets.all(10.0),
+                  //   margin: EdgeInsets.fromLTRB(0, 10.0, 0, 0.0),
+                  //   decoration: BoxDecoration(
+                  //     color: Colors.black38,
+                  //     borderRadius: BorderRadius.all(Radius.circular(100.0)),
+                  //   ),
+                  // )
+                ],
+              ),
           ),
         ));
   }
