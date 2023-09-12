@@ -380,7 +380,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               fontWeight: FontWeight.w500)),
                       trailing: GestureDetector(
                         onTap: (){
-                          Navigator.push(context, Transition(child: const PersonalDetails(),
+                          Navigator.push(context, Transition(child: const PersonalDetails(phoneNum: "NA",),
                               transitionEffect: TransitionEffect.RIGHT_TO_LEFT,curve: Curves.ease,));
                         },
                         child: Container(

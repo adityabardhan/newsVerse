@@ -176,7 +176,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
         }
       }
       Fluttertoast.showToast(
-          msg: "Feed Updated to Latest News",
+          msg: "Feed Updated to Latest News",fontSize: 12,
           gravity: ToastGravity.BOTTOM,
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.white,textColor: Colors.black

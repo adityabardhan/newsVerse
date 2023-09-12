@@ -75,7 +75,7 @@ class _OnBoardingScreenState extends State<OnBoardingScreen> {
     // Initialize page controller
     _pageController = PageController(initialPage: 0);
     // Automatic scroll behaviour
-    _timer = Timer.periodic(const Duration(seconds: 8), (Timer timer) {
+    _timer = Timer.periodic(const Duration(seconds: 7), (Timer timer) {
       if (_pageIndex < 3) {
         _pageIndex++;
       } else {

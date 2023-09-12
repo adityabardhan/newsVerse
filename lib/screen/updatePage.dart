@@ -19,6 +19,7 @@ import 'package:intl/intl.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:lottie/lottie.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:newsverse/AccountDirectPage/splashScreen.dart';
 import 'package:newsverse/AnewPage/loginPage.dart';
 import 'package:newsverse/screen/storeImageFirebase.dart';
 import 'package:newsverse/screens/home_screen.dart';
@@ -292,8 +293,9 @@ class _UpdateProfileState extends State<UpdateProfile>
                 onPressed: ()async {
                   try{
                     if (FirebaseAuth.instance.currentUser!=null) {
-                      await FirebaseAuth.instance.currentUser?.delete();
                       FirebaseFirestore.instance.collection('NewUsers').doc(docId).delete();
+                      await FirebaseAuth.instance.currentUser?.delete();
+
                       ScaffoldMessenger.of(context)
                           .showSnackBar(const SnackBar(
                           backgroundColor: Colors.white,
@@ -308,7 +310,7 @@ class _UpdateProfileState extends State<UpdateProfile>
                           )));
                       Navigator.push(context,
                           MaterialPageRoute(builder: (context) =>
-                              LoginPage()));
+                             const OnBoardingScreen()));
                     }
                     else{
                       ScaffoldMessenger.of(context)
