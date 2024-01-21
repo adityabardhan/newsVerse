@@ -162,14 +162,14 @@ class _CategoricalNewsState extends State<CategoricalNews> {
       _loading = false;
       _retryBtnDisabled = false;
     });
-    Timer(const Duration(milliseconds: 1850),(){
-      Fluttertoast.showToast(
-          msg: "Showing Breaking News",
-          gravity: ToastGravity.BOTTOM,
-          toastLength: Toast.LENGTH_SHORT,
-          backgroundColor: Colors.white,textColor: Colors.black
-      );
-    });
+    // Timer(const Duration(milliseconds: 1850),(){
+    //   Fluttertoast.showToast(
+    //       msg: "News Feed Updated",
+    //       gravity: ToastGravity.BOTTOM,
+    //       toastLength: Toast.LENGTH_SHORT,
+    //       backgroundColor: Colors.white,textColor: Colors.black
+    //   );
+    // });
   }
 
   // int _selectedIndex = 0;
@@ -285,7 +285,7 @@ class _CategoricalNewsState extends State<CategoricalNews> {
             shrinkWrap: true,
             itemCount: imageModelList.length,
             itemBuilder: (context,index){
-              try{
+
                 return Container(
                   decoration:
                   const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
@@ -402,9 +402,10 @@ class _CategoricalNewsState extends State<CategoricalNews> {
                     ),
                   ),
                 );
-              }
-              catch(e){print("227, Categories $e");return const SizedBox.shrink();}
-            },
+
+              // catch(e){print("227, Categories $e");
+                return const SizedBox.shrink();}
+            // },
           ),
         )
             :Center(

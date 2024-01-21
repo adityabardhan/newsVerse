@@ -6,6 +6,7 @@ import 'dart:ui';
 
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -88,7 +89,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
     if (mounted){
       setState(() {
         isLightTheme = settings.get('isLightTheme') ?? false;
-        themeIcon = isLightTheme ? Icon(Icons.dark_mode) : Icon(Icons.light_mode);
+        themeIcon = isLightTheme ? const Icon(Icons.dark_mode) : const Icon(Icons.light_mode);
       });
     }
   }
@@ -176,7 +177,7 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
         }
       }
       Fluttertoast.showToast(
-          msg: "Feed Updated to Latest News",fontSize: 12,
+          msg: "News Feed Updated",fontSize: 12,
           gravity: ToastGravity.BOTTOM,
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.white,textColor: Colors.black
@@ -240,8 +241,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
   Widget build(BuildContext context) {
     Color textColor = !isLightTheme?Colors.white:Colors.black;
     final themeProvider = Provider.of<ThemeProvider>(context);
-    Color baseColor = isLightTheme ? Colors.grey[300]! : Color(0xff2c2c2c);
-    Color highlightColor = isLightTheme ? Colors.grey[100]! : Color(0xff373737);
+    Color baseColor = isLightTheme ? Colors.grey[300]! : const Color(0xff2c2c2c);
+    Color highlightColor = isLightTheme ? Colors.grey[100]! : const Color(0xff373737);
     Color darkColor = isLightTheme?Colors.black.withOpacity(0.95):Colors.white.withOpacity(0.9);
     return WillPopScope(
       onWillPop: exitOverride,
@@ -291,18 +292,29 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               ),
               itemCount: 20,
               itemBuilder: (BuildContext context, int index) {
-                return ShimmerNewsTile();
+                return const ShimmerNewsTile();
               },
             ),
           )
               : _articleExists ?
-          RefreshIndicator(
-            color: isLightTheme?Colors.black:Colors.white,
-            backgroundColor: isLightTheme?Colors.white:Colors.black54,
+          EasyRefresh(
+            // header: const ClassicHeader(position: IndicatorPosition.locator, triggerOffset: 80, clamping: false),
+            footer: const ClassicFooter(),
+            header: ClassicHeader(hapticFeedback: true,
+              textStyle: TextStyle(color: isLightTheme?Colors.black:Colors.white,fontSize: 13.9,fontStyle: FontStyle.italic,
+              fontWeight: FontWeight.w500),
+              iconTheme: IconThemeData(color: isLightTheme?Colors.black:Colors.white,),
+              messageStyle: TextStyle(color: isLightTheme?Colors.black:Colors.white,fontStyle: FontStyle.italic),
+                messageText: "Last Updated: %T",showMessage: false,
+              iconDimension: 18,
+              processedText: "Refreshed",
+              ),
+            // color: isLightTheme?Colors.black:Colors.white,
+            // backgroundColor: isLightTheme?Colors.white:Colors.black54,
             child: ListView.builder(
               scrollDirection: Axis.vertical,
               shrinkWrap: true,
-              physics:const  ClampingScrollPhysics(),
+              // physics:const  BouncingScrollPhysics(),
               itemCount: catModelList.length,
               itemBuilder: (context,index){
                 // return NewsTile(

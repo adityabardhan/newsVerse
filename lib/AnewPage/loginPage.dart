@@ -19,6 +19,8 @@ import 'package:page_transition/page_transition.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:transition/transition.dart';
 
+import '../screen/account_page.dart';
+import '../screen/fingerprintPage.dart';
 import '../screens/tabBar.dart';
 import 'resetPass.dart';
 
@@ -90,6 +92,7 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   @override
   void initState() {
+    getUserData();
     super.initState();
     controller = AnimationController(
       vsync: this,
@@ -114,6 +117,23 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
     super.dispose();
   }
 
+  String? userName, userMail, userDOB, userCountry, userImage,password;
+  var collection = FirebaseFirestore.instance.collection('NewUsers');
+  Future<void> getUserData() async {
+    var querySnapshot = await collection.get();
+    for (var queryDocumentSnapshot in querySnapshot.docs) {
+      Map<String, dynamic> data = queryDocumentSnapshot.data();
+      setState(() {
+        userName = data['name'];
+        userMail = data['mail'];
+        userDOB = data['dob'];
+        userCountry = data['country'];
+        userImage = data['photo'];
+        password = data['pass'];
+      });
+    }
+  }
+
   final searchController = TextEditingController();
   DateTime? currentBackPressTime;
 
@@ -134,13 +154,13 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
   bool showLottie = true;
 
-  void showLockAnimation() {
-    Lottie.asset("assets/icons/done.json",
-        repeat: false, controller: lottieController, onLoaded: (composition) {
-      lottieController?.duration = composition.duration;
-      lottieController?.forward();
-    });
-  }
+  // void showLockAnimation() {
+  //   Lottie.asset("assets/icons/done.json",
+  //       repeat: false, controller: lottieController, onLoaded: (composition) {
+  //     lottieController?.duration = composition.duration;
+  //     lottieController?.forward();
+  //   });
+  // }
 
   Future signInEmailPass() async {
     await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -478,8 +498,8 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                   ),
                                 ),
                           onTap: () async {
-                            if (circularPro) return;
                             setState(() => circularPro = true);
+
                             await Future.delayed(const Duration(seconds: 2));
                             setState(() {
                               circularPro = false;
@@ -487,39 +507,41 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
 
                             if (_formKey.currentState!.validate()) {
                               _formKey.currentState!.save();
+                              // Timer(const Duration(milliseconds: 1000), () {
+                              //   Center(
+                              //     child: CircularProgressIndicator(
+                              //       color: Colors.grey.shade700,
+                              //     ),
+                              //   );
+                              // });
 
                               User? user = FirebaseAuth.instance.currentUser;
 
                               try {
                                 UserCredential userCredential =
-                                    await FirebaseAuth.instance
-                                        .signInWithEmailAndPassword(
-                                            email: emailCont.text.trim(),
-                                            password: passCont.text);
-                                Timer(const Duration(milliseconds: 0), () {
-                                  CircularProgressIndicator(
-                                    color: Colors.grey.shade200,
-                                  );
-                                  ScaffoldMessenger.of(context).showSnackBar(
-                                      SnackBar(
-                                          backgroundColor: Colors.grey.shade100,
-                                          duration: const Duration(
-                                              milliseconds: 1200),
-                                          content: const Text(
-                                            "Successfully Logged In",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.green,
-                                                fontWeight: FontWeight.w400),
-                                            textAlign: TextAlign.center,
-                                          )));
-                                  Navigator.push(
-                                      context,
-                                      Transition(
-                                          child: const Dashboard(),
-                                          transitionEffect:
-                                              TransitionEffect.SCALE));
-                                });
+                                await FirebaseAuth.instance
+                                    .signInWithEmailAndPassword(
+                                    email: emailCont.text.trim(),
+                                    password: passCont.text);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        backgroundColor: Colors.grey.shade100,
+                                        duration: const Duration(
+                                            milliseconds: 1200),
+                                        content: const Text(
+                                          "Successfully Logged In",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.w400),
+                                          textAlign: TextAlign.center,
+                                        )));
+                                Navigator.push(
+                                    context,
+                                    Transition(
+                                        child: const Dashboard(),
+                                        transitionEffect:
+                                        TransitionEffect.SCALE));
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'user-not-found') {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -538,15 +560,15 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                 } else if (e.code == 'wrong-password') {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
-                                          backgroundColor: Colors.grey.shade100,
-                                          content: const Text(
-                                            "Wrong password provided for the user",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.w400),
-                                            textAlign: TextAlign.center,
-                                          )));
+                                      backgroundColor: Colors.grey.shade100,
+                                      content: const Text(
+                                        "Wrong password provided for the user",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w400),
+                                        textAlign: TextAlign.center,
+                                      )));
                                 } else if (!(user != null &&
                                     user!.emailVerified)) {
                                   ScaffoldMessenger.of(context).showSnackBar(
@@ -566,34 +588,86 @@ class _LoginPageState extends State<LoginPage> with TickerProviderStateMixin {
                                     "The email address is badly formatted") {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
-                                          backgroundColor: Colors.grey.shade100,
-                                          content: const Text(
-                                            "Invalid Email (The email address is badly formatted)",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.w400),
-                                            textAlign: TextAlign.center,
-                                          )));
+                                      backgroundColor: Colors.grey.shade100,
+                                      content: const Text(
+                                        "Invalid Email (The email address is badly formatted)",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w400),
+                                        textAlign: TextAlign.center,
+                                      )));
                                 } else if (!user.emailVerified) {
                                   ScaffoldMessenger.of(context)
                                       .showSnackBar(SnackBar(
-                                          backgroundColor: Colors.grey.shade100,
-                                          content: const Text(
-                                            "Verify Your E-mail First",
-                                            style: TextStyle(
-                                                fontSize: 15,
-                                                color: Colors.red,
-                                                fontWeight: FontWeight.w400),
-                                            textAlign: TextAlign.center,
-                                          )));
+                                      backgroundColor: Colors.grey.shade100,
+                                      content: const Text(
+                                        "Verify Your E-mail First",
+                                        style: TextStyle(
+                                            fontSize: 15,
+                                            color: Colors.red,
+                                            fontWeight: FontWeight.w400),
+                                        textAlign: TextAlign.center,
+                                      )));
                                 }
                               }
                             }
+
                           },
                         ),
+                        ProfilePage.isLock!=null?ProfilePage.isLock!?Padding(
+                          padding: const EdgeInsets.only(top: 25),
+                          child: InkWell(
+                            onTap: ()async{
+                              final isAuth = await FingerPrint.authenticate();
+                              if (isAuth){
+                                await FirebaseAuth.instance.signInWithEmailAndPassword(email: userMail!, password: password!);
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                    SnackBar(
+                                        backgroundColor: Colors.grey.shade100,
+                                        duration: const Duration(
+                                            milliseconds: 1200),
+                                        content: const Text(
+                                          "Successfully Logged In",
+                                          style: TextStyle(
+                                              fontSize: 15,
+                                              color: Colors.green,
+                                              fontWeight: FontWeight.w400),
+                                          textAlign: TextAlign.center,
+                                        )));
+                                Navigator.push(
+                                    context,
+                                    Transition(
+                                        child: const Dashboard(),
+                                        transitionEffect:
+                                        TransitionEffect.SCALE));
+                              }
+                              else{
+                                ScaffoldMessenger.of(context)
+                                    .showSnackBar(SnackBar(
+                                    backgroundColor: Colors.grey.shade100,
+                                    content: const Text(
+                                      "FingerPrint Verification Failed",
+                                      style: TextStyle(
+                                          fontSize: 15,
+                                          color: Colors.red,
+                                          fontWeight: FontWeight.w400),
+                                      textAlign: TextAlign.center,
+                                    )));
+                              }
+                            },
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                IconButton(onPressed: (){}, icon: Icon(LineAwesomeIcons.fingerprint,color: Colors.black87.withOpacity(0.75),size: 30,),tooltip: "FingerPrint",),
+                                const Text("Login Using FingerPrint",style: TextStyle(fontSize: 14.5,fontWeight: FontWeight.w600,
+                                color: Colors.black54,fontStyle: FontStyle.italic),)
+                              ],
+                            ),
+                          ),
+                        ):const SizedBox.shrink():const SizedBox.shrink(),
                         const SizedBox(
-                          height: 30,
+                          height: 25,
                         ),
                       ],
                     )),

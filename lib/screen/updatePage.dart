@@ -23,6 +23,7 @@ import 'package:newsverse/AccountDirectPage/splashScreen.dart';
 import 'package:newsverse/AnewPage/loginPage.dart';
 import 'package:newsverse/screen/storeImageFirebase.dart';
 import 'package:newsverse/screens/home_screen.dart';
+import 'package:newsverse/screens/tabBar.dart';
 import 'package:path_provider/path_provider.dart';
 
 import 'account_page.dart';
@@ -693,7 +694,7 @@ class _UpdateProfileState extends State<UpdateProfile>
                                   Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => AccountPage()));
+                                          builder: (context) => const Dashboard()));
                                 });
                               } on FirebaseAuthException catch (e) {
                                 if (e.code == 'email-already-in-use') {

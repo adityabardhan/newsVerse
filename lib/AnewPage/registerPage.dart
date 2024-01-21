@@ -111,7 +111,7 @@ class _RegisterPageState extends State<RegisterPage>
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: ()async {
-        Navigator.pop(context);
+        Navigator.of(context).pop();
         return false;
       },
       child: Form(

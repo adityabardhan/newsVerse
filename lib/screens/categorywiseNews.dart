@@ -64,7 +64,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         }
       }
       Fluttertoast.showToast(
-          msg: "Latest News Refreshed",
+          msg: "Showing Latest News",
           gravity: ToastGravity.BOTTOM,
           toastLength: Toast.LENGTH_SHORT,
           backgroundColor: Colors.white,textColor: Colors.black

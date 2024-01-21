@@ -25,18 +25,27 @@ import 'package:flutter_phoenix/flutter_phoenix.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp();
   final appDirectory = await pathProvider.getApplicationDocumentsDirectory();
   Hive.init(appDirectory.path);
 
   final settings = await Hive.openBox('settings');
   bool isLightTheme = settings.get('isLightTheme') ?? false;
-  runApp(
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,DeviceOrientation.portraitDown
+  ]).then((value) => runApp(
     ChangeNotifierProvider(
       create: (_) => ThemeProvider(isLightTheme: isLightTheme),
       child: const AppStart(),
     ),
-  );
+  ));
+  // runApp(
+  //   ChangeNotifierProvider(
+  //     create: (_) => ThemeProvider(isLightTheme: isLightTheme),
+  //     child: const AppStart(),
+  //   ),
+  // );
 }
 
 class AppStart extends StatelessWidget {

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -10,8 +12,7 @@ import 'package:newsverse/screen/account_page.dart';
 import '../AnewPage/loginPage.dart';
 
 class PersonalDetails extends StatefulWidget {
-  final String phoneNum;
-  const PersonalDetails({super.key,required this.phoneNum});
+  const PersonalDetails({super.key});
 
   @override
   State<PersonalDetails> createState() => _PersonalDetailsState();
@@ -79,8 +80,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
   Widget build(BuildContext context) {
     return WillPopScope(
       onWillPop: ()async{
-        Navigator.push(context, MaterialPageRoute(builder: (context)=> AccountPage()));
-        return Future.value(true);
+        Navigator.of(context).pop();
+        return false;
       },
       child: Scaffold(
         backgroundColor: Colors.grey.shade100,
@@ -105,24 +106,58 @@ class _PersonalDetailsState extends State<PersonalDetails> {
           margin: const EdgeInsets.all(20),
           child: Column(
             children: [
-              const Padding(padding: EdgeInsets.symmetric(vertical: 10)),
+              const Padding(padding: EdgeInsets.symmetric(vertical: 1)),
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Container(
-                    height: MediaQuery.of(context).size.height*0.13,
-                    width: MediaQuery.of(context).size.width*0.32,
-                    child: userImage!=null?CircleAvatar(
-                      backgroundImage: NetworkImage(userImage!),
-                    ):const SizedBox.shrink(),
+                    alignment: Alignment.center,
+                    child: CircleAvatar(
+                      radius: 51.01,
+                      backgroundColor: Colors.black26,
+                      child:
+                      userImage == null ?
+                      const SizedBox.shrink()
+                          : CircleAvatar(
+                        backgroundImage: NetworkImage(userImage!),
+                        backgroundColor: Colors.black,
+                        radius: 50,
+                      ),
+                    ),
                   ),
-                  const SizedBox(width: 10,),
+                  // userImage!=null?Container(
+                  //   height: MediaQuery.of(context).size.height*0.13,
+                  //   width: MediaQuery.of(context).size.width*0.31,
+                  //   decoration: BoxDecoration(
+                  //     shape: BoxShape.circle,
+                  //     image: DecorationImage(
+                  //       image: NetworkImage(userImage!,scale: 4),filterQuality: FilterQuality.high,
+                  //       fit: BoxFit.scaleDown,
+                  //
+                  //
+                  //     )
+                  //   ),
+                  //   // child: userImage!=null?CircleAvatar(
+                  //   //   backgroundImage: NetworkImage(userImage!),
+                  //   // ):const SizedBox.shrink(),
+                  // ):const SizedBox.shrink(),
+                  // const SizedBox(width: 10,),
                   Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       userName!=null?Text(userName!,style:const  TextStyle(fontSize: 17.5,color: Colors.black),):const SizedBox.shrink(),
-                      userEmail!=null?Text(userEmail!,style: const TextStyle(fontSize: 14.2,color: Colors.black),textAlign: TextAlign.center,
+                      userEmail!=null?Text(userEmail!,style: const TextStyle(fontSize: 14,color: Colors.black),textAlign: TextAlign.center,
                       maxLines: 2,):const SizedBox.shrink(),
                     ],
                   )
+                ],
+              ),
+              const SizedBox(height: 30,),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                  userDOB!=null?Text("User's Date of Birth :- $userDOB"):const Text("User Date of Birth :- NA")
                 ],
               ),
               const SizedBox(height: 40,),
@@ -130,13 +165,6 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   userCountry!=null?Text("User's Country :- $userCountry"):const Text("User's Country :- NA")
-                ],
-              ),
-              const SizedBox(height: 40,),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  userDOB!=null?Text("User's Date of Birth :- $userDOB"):const Text("User Date of Birth :- NA")
                 ],
               ),
               const SizedBox(height: 40,),
@@ -174,7 +202,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   Text("Phone Number :- $phone")
                 ],
               ),
-              const SizedBox(height: 20,),
+              const SizedBox(height: 25,),
 
               SizedBox(height: MediaQuery.of(context).size.height*0.04,),
               Row(
@@ -282,7 +310,7 @@ class _PersonalDetailsState extends State<PersonalDetails> {
                   )
                 ],
               ),
-              const SizedBox(height: 7,),
+              const SizedBox(height: 15,),
               GestureDetector(
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (context)=> const LoginNumber()));
