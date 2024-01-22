@@ -93,6 +93,8 @@ dependencies:
   flutter_advanced_switch: ^3.0.1
   lite_rolling_switch: ^1.0.1
   flutter_switch: ^0.3.2
+  floating_action_bubble: ^1.1.4
+  flutter_exit_app: ^1.1.2
 
 dev_dependencies:
   flutter_test:

@@ -1,14 +1,22 @@
 import 'dart:async';
 import 'dart:io';
 import 'package:connectivity_plus/connectivity_plus.dart';
+import 'package:floating_action_bubble/floating_action_bubble.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:get/get.dart';
 import 'package:hive/hive.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsverse/screens/categorywiseNews.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../helper/navigation_bar.dart';
 import '../screens/home_screen.dart';
 import '../screens/imageCategory.dart';
+import '../screens/image_screen.dart';
 import '../screens/tabBar.dart';
 import 'account_page.dart';
 
@@ -221,7 +229,10 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(false);exit(0);
+                  FlutterExitApp.exitApp(iosForceExit: true);
+                  Navigator.pop(context);
+                  // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
+                  // Navigator.of(context).pop(false);exit(0);
                 },
                 child: Text('Yes',style: TextStyle(color: Colors.black87.withOpacity(0.6),
                     fontWeight: FontWeight.w800,fontSize: 15)),
@@ -234,6 +245,24 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
 
   @override
   Widget build(BuildContext context) {
+    FocusNode focus = FocusNode();bool hasFocus = false;
+    void onFocusChange() {
+      if (focus.hasFocus) {
+        setState(() {
+          hasFocus = true;
+        });
+      } else {
+        setState(() {
+          hasFocus = false;
+        });
+      }
+    }
+    initState(){
+      focus.addListener(() {
+        onFocusChange();
+      });
+    }
+
     Color iconColor =
         !isLightTheme ? Colors.black : Colors.white.withOpacity(0.9);
     Color textColor =
@@ -245,6 +274,13 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
             backgroundColor: isLightTheme
                 ? Colors.grey.withOpacity(0.1)
                 : Colors.grey.shade800.withOpacity(0.4),
+            // floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
+            // floatingActionButton: FloatingActionButton(onPressed: () { showSearch(context: context, delegate:MySearchBar (isLightTheme)); },
+            // backgroundColor: isLightTheme
+            //     ? Colors.grey
+            //     : Colors.grey.shade800,
+            //   child: const Icon(Icons.search_outlined,size: 25,),
+            // ),
             appBar: AppBar(
               elevation: 0,
               automaticallyImplyLeading: false,
@@ -252,12 +288,13 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                   ? Colors.white.withOpacity(0.04)
                   : Colors.grey.withOpacity(0.04),
               flexibleSpace: Container(
-                padding: const EdgeInsets.only(top: 5),
-                margin: const EdgeInsets.only(
-                    top: 40, left: 30, right: 30, bottom: 5),
+                margin:  EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height*0.04,
+                    left: MediaQuery.of(context).size.width*0.055, right: MediaQuery.of(context).size.width*0.055,
+                    bottom: MediaQuery.of(context).size.height*0.001),
                 // padding: ,
                 decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(15),
+                    borderRadius: BorderRadius.circular(20),
                     color: Colors.white),
                 child: TextFormField(
                   style: TextStyle(color: Colors.black.withOpacity(0.8)),
@@ -306,37 +343,69 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                   },
                   decoration: InputDecoration(
                       border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(15),
+                        borderRadius: BorderRadius.circular(20),
                       ),
                       enabledBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(
                             color: Colors.white.withOpacity(0.5),
                           )),
                       focusedBorder: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(15),
+                          borderRadius: BorderRadius.circular(20),
                           borderSide: BorderSide(
                             color: Colors.white.withOpacity(0.6),
                           )),
+                      // suffixIcon: IconButton(
+                      //   icon: Icon(
+                      //     Icons.search_rounded,
+                      //     size: 24,
+                      //     color: Colors.black.withOpacity(0.6),
+                      //   ),
+                      //   onPressed: () {
+                      //     if (searchSave.isNotEmpty && mounted) {
+                      //       setState(() {
+                      //         Navigator.push(
+                      //             context,
+                      //             MaterialPageRoute(
+                      //                 builder: (context) => CategoriesPage(
+                      //                       query: searchSave.trim(),
+                      //                     )));
+                      //       });
+                      //     }
+                      //   },
+                      //   splashColor: Colors.transparent,
+                      // ),
                       suffixIcon: IconButton(
-                        icon: Icon(
-                          Icons.search_rounded,
-                          size: 24,
-                          color: Colors.black.withOpacity(0.6),
-                        ),
-                        onPressed: () {
-                          if (searchSave.isNotEmpty && mounted) {
-                            setState(() {
-                              Navigator.push(
-                                  context,
-                                  MaterialPageRoute(
-                                      builder: (context) => CategoriesPage(
-                                            query: searchSave.trim(),
-                                          )));
-                            });
-                          }
+                        tooltip: "Clear",
+                        onPressed:  searchController.clear,
+                        splashRadius: 25,
+                        icon: Icon(Icons.clear_sharp,size: 24,
+                          color: Colors.black.withOpacity(0.6),),
+                      ),
+                      prefixIcon: IconButton(
+                        tooltip: "GitHub",
+                        onPressed: () async {
+                            final url = Uri.parse("https://github.com/adityabardhan/newsVerse");
+                            if(await canLaunchUrl(url)){
+                              Fluttertoast.showToast(
+                                  msg: "Redirecting to Source Code",
+                                  gravity: ToastGravity.BOTTOM,
+                                  toastLength: Toast.LENGTH_LONG
+                              );
+                              await launchUrl(url,mode: LaunchMode.externalApplication);
+                            }else{
+                              Fluttertoast.showToast(
+                                  msg: "Unable to Redirect",
+                                  gravity: ToastGravity.BOTTOM,
+                                  toastLength: Toast.LENGTH_LONG,
+                                  backgroundColor: Colors.white,textColor: Colors.red
+                              );
+                            }
+
                         },
-                        splashColor: Colors.transparent,
+                        splashRadius: 22,
+                        icon: Icon(MdiIcons.github,size: 24,
+                          color: Colors.black.withOpacity(0.6),),
                       ),
                       hintStyle:
                           TextStyle(color: Colors.black.withOpacity(0.8)),
@@ -345,103 +414,18 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                 ),
               ),
             ),
+
             // bottomNavigationBar: const BottomNavBar("search"),
             body:  Column(
                 children: [
-                  // Container(
-                  //   margin: const EdgeInsets.only(
-                  //       top: 40, left: 30, right: 30, bottom: 0),
-                  //   // padding: ,
-                  //   decoration: BoxDecoration(
-                  //       borderRadius: BorderRadius.circular(15),
-                  //       color: Colors.white),
-                  //   child: TextFormField(
-                  //     style: TextStyle(color: Colors.black.withOpacity(0.8)),
-                  //     cursorColor: Colors.grey.withOpacity(0.08),
-                  //     onChanged: (value) {
-                  //       if (mounted) {
-                  //         setState(() {
-                  //           searchSave = value!;
-                  //         });
-                  //       }
-                  //     },
-                  //     onTap: () {
-                  //       if (mounted) {
-                  //         setState(() {
-                  //           textItem.clear();
-                  //         });
-                  //       }
-                  //     },
-                  //     onSaved: (value) {
-                  //       if (mounted) {
-                  //         setState(() {
-                  //           searchSave = value!;
-                  //         });
-                  //       }
-                  //     },
-                  //     // cursorColor: Colors.black38,
-                  //     controller: searchController,
-                  //     textInputAction: TextInputAction.search,
-                  //     autocorrect: true,
-                  //     onFieldSubmitted: (value) {
-                  //       if (mounted) {
-                  //         setState(() {
-                  //           if (value!.isEmpty) {
-                  //             return;
-                  //           } else {
-                  //             searchSave = value!;
-                  //             Navigator.push(
-                  //                 context,
-                  //                 MaterialPageRoute(
-                  //                     builder: (context) => CategoriesPage(
-                  //                       query: value,
-                  //                     )));
-                  //           }
-                  //         });
-                  //       }
-                  //     },
-                  //     decoration: InputDecoration(
-                  //         border: OutlineInputBorder(
-                  //           borderRadius: BorderRadius.circular(15),
-                  //           borderSide: BorderSide(color: Colors.grey.shade300)
-                  //         ),
-                  //         enabledBorder: OutlineInputBorder(
-                  //             borderRadius: BorderRadius.circular(15),
-                  //             borderSide: BorderSide(color: Colors.grey.shade300)),
-                  //         focusedBorder: OutlineInputBorder(
-                  //             borderRadius: BorderRadius.circular(15),
-                  //             borderSide: BorderSide(color: Colors.grey.shade300)),
-                  //         suffixIcon: IconButton(
-                  //           icon: Icon(
-                  //             Icons.search_rounded,
-                  //             size: 24,
-                  //             color: Colors.black.withOpacity(0.6),
-                  //           ),
-                  //           onPressed: () {
-                  //             if (searchSave.isNotEmpty && mounted) {
-                  //               setState(() {
-                  //                 Navigator.push(
-                  //                     context,
-                  //                     MaterialPageRoute(
-                  //                         builder: (context) => CategoriesPage(
-                  //                           query: searchSave.trim(),
-                  //                         )));
-                  //               });
-                  //             }
-                  //           },
-                  //           splashColor: Colors.transparent,
-                  //         ),
-                  //         hintStyle:
-                  //         TextStyle(color: Colors.black.withOpacity(0.8)),
-                  //         hintText: "Search News"),
-                  //   ),
-                  // ),
-                  Expanded(
+                  SizedBox(height: MediaQuery.of(context).size.height*0.013,),
+                  Flexible(
+                    fit: FlexFit.tight,flex: 2,
                     child: Container(
                       margin: const EdgeInsets.only(
-                          bottom: 17, left: 12, right: 12,top: 20),
+                          bottom: 11, left: 12.5, right: 12.5,top: 0),
                       child: GridView.builder(
-                          scrollDirection: Axis.vertical,
+                          // scrollDirection: Axis.vertical,
                             keyboardDismissBehavior:
                                 ScrollViewKeyboardDismissBehavior.onDrag,
                             physics: const AlwaysScrollableScrollPhysics(),
@@ -450,7 +434,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
                             gridDelegate:
                                 const SliverGridDelegateWithFixedCrossAxisCount(
                                     crossAxisCount: 2,
-                                    childAspectRatio: 8 / 8.2,
+                                    childAspectRatio: 8 / 8,
                                     crossAxisSpacing: 15,
                                     mainAxisSpacing: 15),
                             itemBuilder: (BuildContext context, int index) {
@@ -912,6 +896,7 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
 
                     ),
                   ),
+                  // SizedBox(height: MediaQuery.of(context).size.height*0.02,),
                   // Container(
                   //   child: GestureDetector(
                   //     onTap: () async => _pullToRefresh(),
@@ -932,5 +917,98 @@ class _DiscoveryPageState extends State<DiscoveryPage> {
               ),
           ),
         ));
+  }
+}
+
+class  MySearchBar extends SearchDelegate{
+  List<String> textItem = [
+    'National',
+    'International',
+    'Business & Commerce',
+    'Science & Education',
+    'Entertainment & Fun',
+    'Technological',
+    'Sports',
+    'Political',
+    'Car & AutoMobile',
+  ];
+  bool isLightTheme;
+  MySearchBar(this.isLightTheme);
+
+
+  ThemeData appBarTheme(BuildContext context) {
+    Color bg = (isLightTheme?Colors.white:Colors.grey.withOpacity(0.0));
+    return ThemeData(
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: !isLightTheme?Colors.grey:Colors.grey.withOpacity(0.25)
+      ),
+      brightness:isLightTheme?Brightness.light:Brightness.dark,
+      platform: TargetPlatform.android,
+
+      textTheme: TextTheme(
+        // Use this to change the query's text style
+        titleLarge: TextStyle(fontSize: 18.0,color: isLightTheme?Colors.black:Colors.white,),
+      ),
+      appBarTheme: AppBarTheme(
+        elevation: 0,
+        color: bg,
+        // backgroundColor: bg,
+      ),
+
+      inputDecorationTheme: InputDecorationTheme(
+        isCollapsed: true,
+        border: InputBorder.none,
+        // Use this change the placeholder's text style
+        hintStyle: TextStyle(fontSize: 18.0,color: isLightTheme?Colors.black:Colors.white,),
+      ),
+    );
+  }
+
+  @override
+  List<Widget>? buildActions(BuildContext context) {
+    return [IconButton(
+      splashRadius: 18,
+          onPressed: () {
+            query = "";
+          },
+          icon:  Icon(Icons.clear,color: isLightTheme?Colors.black:Colors.white,),
+        )
+];
+  }
+
+  @override
+  Widget? buildLeading(BuildContext context) {
+    return IconButton(onPressed: (){
+      Navigator.pop(context);
+    },splashRadius: 18,
+        icon: Icon(Icons.arrow_back,color: isLightTheme?Colors.black:Colors.white,));
+  }
+
+  @override
+  Widget buildResults(BuildContext context) {
+    return CategoriesPage(query: query);
+  }
+
+  @override
+  Widget buildSuggestions(BuildContext context) {
+
+    final List<String> suggestionList = query.isEmpty
+        ? []
+        : textItem
+        .where((item) => item.toLowerCase().contains(query.toLowerCase()))
+        .toList();
+
+    return ListView.builder(
+      itemCount: suggestionList.length,
+      itemBuilder: (context, index) {
+        return ListTile(
+          title: Text(suggestionList[index]),
+          onTap: () {
+            query = suggestionList[index];
+            // Show the search results based on the selected suggestion.
+          },
+        );
+      },
+    );
   }
 }

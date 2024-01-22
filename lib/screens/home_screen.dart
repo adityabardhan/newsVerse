@@ -10,6 +10,7 @@ import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:hive/hive.dart';
 import 'package:http/http.dart';
@@ -217,7 +218,8 @@ class _HomeScreenState extends State<HomeScreen> with AutomaticKeepAliveClientMi
               ),
               TextButton(
                 onPressed: () {
-                  Navigator.of(context).pop(false);exit(0);
+                  // SystemNavigator.pop();
+                  FlutterExitApp.exitApp();
                 },
                 child: Text('Yes',style: TextStyle(color: Colors.black87.withOpacity(0.6),
                 fontWeight: FontWeight.w800,fontSize: 15)),

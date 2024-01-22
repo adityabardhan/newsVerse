@@ -8,6 +8,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_advanced_switch/flutter_advanced_switch.dart';
+import 'package:flutter_exit_app/flutter_exit_app.dart';
 import 'package:flutter_switch/flutter_switch.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:google_sign_in/google_sign_in.dart';
@@ -214,8 +215,8 @@ class _ProfilePageState extends State<ProfilePage>
                       ),
                       TextButton(
                         onPressed: () {
-                          Navigator.of(context).pop(false);
-                          exit(0);
+                          FlutterExitApp.exitApp();
+                          // SystemChannels.platform.invokeMethod('SystemNavigator.pop');
                         },
                         child: Text('Yes',
                             style: TextStyle(

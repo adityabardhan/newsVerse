@@ -7,7 +7,9 @@ import 'package:flutter/material.dart';
 import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsverse/AccountDirectPage/enter_PhoneNumber.dart';
+import 'package:newsverse/helper/navigation_bar.dart';
 import 'package:newsverse/screen/account_page.dart';
+import 'package:newsverse/screens/tabBar.dart';
 
 import '../AnewPage/loginPage.dart';
 
@@ -95,8 +97,8 @@ class _PersonalDetailsState extends State<PersonalDetails> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back_rounded,color: Colors.black,),
             onPressed: (){
-              Navigator.pop(context);
-              // Navigator.push(context, MaterialPageRoute(builder: (context)=> AccountPage()));
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=> const Dashboard()));
+              // Navigator.pop(context);
             },
           ),
           backgroundColor: Colors.grey.shade100,

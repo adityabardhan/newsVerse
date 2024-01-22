@@ -176,7 +176,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
         backgroundColor: isLightTheme?Colors.white.withOpacity(0.9):Colors.grey.withOpacity(0.02),
         elevation: 0,centerTitle: true,
       ),
-      backgroundColor: isLightTheme?Colors.white.withOpacity(1):Colors.grey.withOpacity(0.2),
+      backgroundColor: isLightTheme?Colors.white.withOpacity(1):Colors.grey.withOpacity(0.3),
       body:
       isLoading?
       RefreshIndicator(
@@ -192,7 +192,7 @@ class _CategoriesPageState extends State<CategoriesPage> {
               return Container(
                 decoration:
                 const BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(10))),
-                margin: const EdgeInsets.only(bottom: 24),
+                margin: const EdgeInsets.fromLTRB(0,10,0,24),
                 width: MediaQuery.of(context).size.width,
                 child: Container(
                   padding: const EdgeInsets.symmetric(horizontal: 20),

@@ -267,7 +267,7 @@ class _DrawerScreenState extends State<DrawerScreen> {
                           backgroundColor: isLightTheme?Colors.transparent:textColor.withOpacity(0.9),
                           child: IconButton(onPressed: (){
                             HapticFeedback.selectionClick();
-                            _launchURL("https://www.instagram.com/aapka__aditya/");
+                            _launchURL("https://www.instagram.com/ityaadi._?igsh=MXhkbGJremUybjNzcg==");
                           }, icon: Icon(FontAwesomeIcons.instagram,size: 22,
                           color: Colors.redAccent.shade400,
                           ),)),

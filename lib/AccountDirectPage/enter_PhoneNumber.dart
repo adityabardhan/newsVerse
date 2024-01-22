@@ -8,6 +8,7 @@ import 'package:line_awesome_flutter/line_awesome_flutter.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:newsverse/AccountDirectPage/personalDetails.dart';
 import 'package:newsverse/AccountDirectPage/splashScreen.dart';
+import 'package:newsverse/screen/account_page.dart';
 import 'package:pinput/pinput.dart';
 
 class LoginNumber extends StatefulWidget {
@@ -46,11 +47,11 @@ class _LoginNumberState extends State<LoginNumber> {
   }
 
   final FirebaseFirestore fireStore = FirebaseFirestore.instance;
-  updateNumber() async {
+  updateNumber(String phoneNum) async {
     fireStore
         .collection("NewUsers")
         .doc(docId)
-        .update({"phone": countryCode.text + phoneNum.text});
+        .update({"phone": countryCode.text + phoneNum});
   }
 
   @override
@@ -69,7 +70,7 @@ class _LoginNumberState extends State<LoginNumber> {
             leading: IconButton(
               onPressed: () {
                 setState(() {
-                  Navigator.of(context).pop();
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=> const PersonalDetails()));
                 });
               },
               icon: const Icon(
@@ -293,12 +294,11 @@ class _LoginNumberState extends State<LoginNumber> {
                           final credential = PhoneAuthProvider.credential(
                               verificationId: id, smsCode: code);
                           await auth.signInWithCredential(credential);
-                          updateNumber();
                             ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                                 backgroundColor: Colors.grey.shade100,
                                 duration: const Duration(milliseconds: 3000),
                                 content: const Text(
-                                  "Number Added Successfully.Kindly Re-Login",
+                                  "Number Added Successfully",
                                   style: TextStyle(
                                       fontSize: 15,
                                       color: Colors.green,
@@ -307,11 +307,12 @@ class _LoginNumberState extends State<LoginNumber> {
                                 )));
                             LoginNumber.phNumber =
                                 countryCode.text + phoneNum.text;
-                            await auth.signOut();
+                            // await auth.signOut();
+                          updateNumber(phoneNum.text);
                             Navigator.push(
                                 context,
                                 MaterialPageRoute(
-                                    builder: (context) => const OnBoardingScreen()));
+                                    builder: (context) => const PersonalDetails()));
                         } catch (e) {
                           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
                               backgroundColor: Colors.grey.shade100,

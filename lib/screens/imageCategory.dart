@@ -52,7 +52,7 @@ class _CategoricalNewsState extends State<CategoricalNews> {
       checkConnectivity();
     });
     _loading = true;
-    getNews();
+    // getNews();
     getTheme();
     getNewsByCategory();
   }
